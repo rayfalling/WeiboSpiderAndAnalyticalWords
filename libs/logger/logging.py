@@ -2,8 +2,9 @@
 import sys
 import logging
 import logging.handlers
-from datetime import datetime
 
+from datetime import datetime
+from libs.helper import get_temp_dir
 
 ENABLE_DEBUG = False
 
@@ -33,7 +34,7 @@ rootLogger = logging.getLogger()
 rootLogger.setLevel(logging.DEBUG)
 
 fileHandler = logging.handlers.TimedRotatingFileHandler(
-    "logs/log.txt", backupCount=10, when="H", interval=6, encoding="utf-8"
+    get_temp_dir() + "/logs/log.txt", backupCount=10, when="H", interval=6, encoding="utf-8"
 )
 fileHandler.setLevel(logging.INFO)
 fileHandler.setFormatter(logging.Formatter("%(message)s"))
@@ -43,6 +44,10 @@ consoleHandler = logging.StreamHandler(sys.stdout)
 consoleHandler.setLevel(logging.DEBUG)
 consoleHandler.setFormatter(ColorFormatter("%(message)s"))
 rootLogger.addHandler(consoleHandler)
+
+# Hack for request logging settings
+requests_log = logging.getLogger("urllib3")
+requests_log.setLevel(logging.WARNING)
 
 
 def format_message(source: str, log_type: str, message: str):

@@ -1,7 +1,8 @@
 # coding: utf-8
-from datetime import datetime, time
-
 import typing
+
+from json import JSONEncoder
+from datetime import datetime, time
 
 
 class CommentData(object):
@@ -15,6 +16,9 @@ class CommentData(object):
         :param count: 评论数
         :param comments: 评论回复
         """
+        if comments is None:
+            comments = []
+
         self.count: int = count
         self.comment: typing.Optional[typing.List[str]] = comments
 
@@ -94,3 +98,24 @@ class PostData(object):
         :return: 页面地址
         """
         return self.__post_origin_url
+
+
+class PostDataEncoder(JSONEncoder):
+    def default(self, obj: PostData):
+        return {
+            "data": {
+                "mid": obj.mid,
+                "time": obj.time.strftime("%Y-%m-%d %H:%M:%S"),
+                "text": obj.content,
+                "userid": obj.user_id,
+                "username": obj.username,
+                "reposts_count": obj.reposts_count,
+                "attitudes_count": obj.attitudes_count,
+
+                "comment":{
+                    "comments_count": obj.comment.count,
+                    "comments_list": obj.comment.comment,
+                }
+            },
+            "scheme": obj.get_scheme()
+        }
