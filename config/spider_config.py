@@ -9,8 +9,14 @@ search_url_template = "https://m.weibo.cn/api/container/getIndex?type=wb&queryVa
 # 微博详情获取
 content_url_template = "https://m.weibo.cn/statuses/extend?id={}"
 
-# 详情页面数据
-status_url_template = "https://m.weibo.cn/statuses/show?id={}"
+# 详情页面数据(不需要登录态), 限制每次只能获取3页数据
+comment_url_template = "https://m.weibo.cn/api/comments/show?id={}&page={}"
+
+# 全部评论信息(不需要登录态), 限制每次只能获取1页数据
+hot_flow_url_template = "https://m.weibo.cn/comments/hotflow?id={}&mid={}&max_id_type=0"
+
+# 全部评论信息(需要登录态)
+hot_flow_login_url_template = "https://m.weibo.cn/comments/hotflow?id={}&mid={}&max_id={}&max_id_type=1"
 
 # 是否使用代理
 use_request_proxy = True
@@ -34,7 +40,10 @@ headers = {
 multi_processing_pool_core_count = 4
 
 # 无效内容关键词
-invalid_keyword = ["的微博视频", ]
+invalid_keyword = {
+    "的微博视频": False,
+    "微博问答": True
+}
 
 # 固定搜索的关键词
 search_keyword = ["鸿星尔克", ]

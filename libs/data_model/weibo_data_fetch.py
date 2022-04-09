@@ -10,17 +10,17 @@ class CommentData(object):
     评论回复数据
     """
 
-    def __init__(self, count: int, comments: typing.Optional[typing.List[str]] = None):
+    def __init__(self, count: int, comments: typing.Optional[typing.Dict[int, str]] = None):
         """
 
         :param count: 评论数
         :param comments: 评论回复
         """
         if comments is None:
-            comments = []
+            comments = {}
 
         self.count: int = count
-        self.comment: typing.Optional[typing.List[str]] = comments
+        self.comment: typing.Optional[typing.Dict[int, str]] = comments
 
     def get_comment_count(self) -> int:
         """
@@ -36,7 +36,7 @@ class PostData(object):
     爬虫数据基类
     """
 
-    def __init__(self, mid: int = -1, user_id: int = -1, username: str = "", content: str = "",
+    def __init__(self, mid: int = -1, user_id: int = -1, username: str = "", content: str = "", tags: list[str] = [],
                  post_time: datetime = datetime.now(), attitudes_count: int = 0, comments_count: int = 0,
                  reposts_count: int = 0):
         """
@@ -56,10 +56,13 @@ class PostData(object):
         self.mid: int = mid
         # 用户Id
         self.user_id: int = user_id
-        # 微博内容
-        self.content: str = content
         # 用户名
         self.username: str = username
+
+        # 微博词条
+        self.tags: typing.List[str] = tags
+        # 微博内容
+        self.content: str = content
 
         # 微博发布时间
         self.time: datetime = post_time
@@ -106,6 +109,7 @@ class PostDataEncoder(JSONEncoder):
             "data": {
                 "mid": obj.mid,
                 "time": obj.time.strftime("%Y-%m-%d %H:%M:%S"),
+                "tags": obj.tags,
                 "text": obj.content,
                 "userid": obj.user_id,
                 "username": obj.username,
