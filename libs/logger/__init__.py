@@ -1,3 +1,3 @@
 from .logging import FormatLogger
 
-__all__ = "FormatLogger"
+__all__ = ("FormatLogger",)

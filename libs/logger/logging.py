@@ -5,8 +5,9 @@ import logging.handlers
 
 from datetime import datetime
 from libs.helper import get_temp_dir
+from config.flask_config import GLOBAL_DEBUG
 
-ENABLE_DEBUG = False
+ENABLE_DEBUG = GLOBAL_DEBUG
 
 
 class ColorFormatter(logging.Formatter):
