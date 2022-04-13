@@ -36,9 +36,9 @@ class PostData(object):
     爬虫数据基类
     """
 
-    def __init__(self, mid: int = -1, user_id: int = -1, username: str = "", content: str = "", tags: list[str] = [],
+    def __init__(self, mid: int = -1, user_id: int = -1, username: str = "", content: str = "", tags=None,
                  post_time: datetime = datetime.now(), attitudes_count: int = 0, comments_count: int = 0,
-                 reposts_count: int = 0):
+                 reposts_count: int = 0, search_key: str = ""):
         """
         微博数据构造函数
 
@@ -53,6 +53,9 @@ class PostData(object):
         """
 
         # 资讯Id
+        if tags is None:
+            tags = []
+
         self.mid: int = mid
         # 用户Id
         self.user_id: int = user_id
@@ -63,6 +66,8 @@ class PostData(object):
         self.tags: typing.List[str] = tags
         # 微博内容
         self.content: str = content
+        # 搜索关键词
+        self.search_key: str = search_key
 
         # 微博发布时间
         self.time: datetime = post_time

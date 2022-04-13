@@ -23,8 +23,12 @@ class SpiderOriginPostData(db.Model):
     user_id = db.Column(BIGINT, nullable=False)
     # 微博用户名称
     username = db.Column(NVARCHAR(64), nullable=False)
+    # 微博Tags
+    tags = db.Column(NVARCHAR(256), nullable=False)
     # 微博文本数据
     content = db.Column(LONGTEXT, nullable=False)
+    # 搜索关键词
+    search_key = db.Column(NVARCHAR(256), nullable=False)
     # 发布时间
     time = db.Column(DATETIME, nullable=False)
     # 点赞量
@@ -38,7 +42,9 @@ class SpiderOriginPostData(db.Model):
         self.mid = post_data.mid
         self.user_id = post_data.user_id
         self.username = post_data.username
+        self.tags = "#".join(post_data.tags)
         self.content = post_data.content
+        self.search_key = post_data.search_key
         self.time = post_data.time.strftime("%Y-%m-%d %H:%M:%S")
         self.attitudes_count = post_data.attitudes_count
         self.comments_count = post_data.comment.count

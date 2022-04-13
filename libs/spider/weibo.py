@@ -67,7 +67,7 @@ def fetch_post(query_val: str, page_id: int) -> typing.List[typing.Union[typing.
         blog = PostData(
             mid=int(mblog["id"]), user_id=mblog["user"]["id"], username=mblog["user"]["screen_name"], tags=tags,
             content=simple_content, post_time=post_time, attitudes_count=mblog["attitudes_count"],
-            comments_count=mblog["comments_count"], reposts_count=mblog["reposts_count"]
+            comments_count=mblog["comments_count"], reposts_count=mblog["reposts_count"], search_key=query_val
         )
 
         blog.set_scheme(card["scheme"])
