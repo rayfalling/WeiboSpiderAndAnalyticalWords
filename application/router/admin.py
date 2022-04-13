@@ -4,6 +4,7 @@ from flask import Blueprint, request, jsonify
 from libs import fetch_pages, FormatLogger
 
 from .common import process_after_request
+from ..functions import insert_all_data
 
 admin_router = Blueprint("admin", __name__)
 admin_router.after_request(process_after_request)
@@ -35,7 +36,6 @@ def request_spider_update():
         response_data["message"] = "参数错误"
         return jsonify(response_data)
 
-    result = []
     try:
         result = fetch_pages(request_keyword, request_pages)
     except (RuntimeError, ValueError, IndexError):
@@ -43,5 +43,11 @@ def request_spider_update():
         response_data["message"] = "数据抓取错误"
         return jsonify(response_data)
 
-    # TODO 更新数据库相关操作
+    success_count = insert_all_data(result)
+    response_data["status"] = 0
+    response_data["message"] = "数据抓取成功"
+    response_data["data"] = {
+        "count": success_count
+    }
+
     return jsonify(response_data)
