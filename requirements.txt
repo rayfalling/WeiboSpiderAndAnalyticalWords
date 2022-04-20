@@ -1,8 +1,17 @@
+# coding: utf-8
+
+# 爬虫相关依赖库
 requests
 
+# 数据库依赖库
 sqlalchemy
+pymysql
 
+# Flask框架相关
 flask
 flask_sqlalchemy
 
-pymysql
+# 分词相关依赖库
+jieba >= 0.40
+paddlepaddle >= 1.6.1
+Pillow == 8.4.0

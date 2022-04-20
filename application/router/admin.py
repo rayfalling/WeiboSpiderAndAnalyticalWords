@@ -12,9 +12,13 @@ admin_router.after_request(process_after_request)
 __all__ = ("admin_router",)
 
 
-# 请求爬虫更新
 @admin_router.route("/admin/spider/update", methods=["POST"])
 def request_spider_update():
+    """
+    路由--请求爬虫更新
+
+    :return:
+    """
     response_data = {
         "status": -1,
         "message": "请求失败",
@@ -49,5 +53,8 @@ def request_spider_update():
     response_data["data"] = {
         "count": success_count
     }
+
+    # TODO 开始处理分词结果
+    # 异步线程完成
 
     return jsonify(response_data)

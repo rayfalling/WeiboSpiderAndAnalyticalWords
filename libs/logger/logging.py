@@ -4,7 +4,7 @@ import logging
 import logging.handlers
 
 from datetime import datetime
-from libs.helper import get_temp_dir
+from utils import get_temp_dir
 from config.flask_config import GLOBAL_DEBUG
 
 ENABLE_DEBUG = GLOBAL_DEBUG
@@ -42,13 +42,23 @@ fileHandler.setFormatter(logging.Formatter("%(message)s"))
 rootLogger.addHandler(fileHandler)
 
 consoleHandler = logging.StreamHandler(sys.stdout)
-consoleHandler.setLevel(logging.DEBUG)
+consoleHandler.setLevel(logging.DEBUG if ENABLE_DEBUG else logging.INFO)
 consoleHandler.setFormatter(ColorFormatter("%(message)s"))
 rootLogger.addHandler(consoleHandler)
 
 # Hack for request logging settings
 requests_log = logging.getLogger("urllib3")
 requests_log.setLevel(logging.WARNING)
+
+# Hack for Pillow logging settings
+pillow_log = logging.getLogger("PIL.Image")
+pillow_log.setLevel(logging.WARNING)
+
+# Hack for jieba logging settings
+jieba_log = logging.getLogger("jieba")
+jieba_log.setLevel(logging.WARNING)
+# Remove jieba defined handler
+jieba_log.handlers.clear()
 
 
 def format_message(source: str, log_type: str, message: str):

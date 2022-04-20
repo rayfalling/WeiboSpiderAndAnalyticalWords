@@ -4,7 +4,7 @@ import multiprocessing
 import os.path
 import typing
 from time import sleep
-from typing import Tuple, Any
+from typing import Any
 
 import requests
 import requests.utils
@@ -13,9 +13,11 @@ from datetime import datetime
 
 from requests import Response
 
+from utils import clean_text, get_temp_dir
+
 from libs.logger import FormatLogger
-from libs.helper import clean_text, get_temp_dir
 from libs.data_model.weibo_data_fetch import PostData, PostDataEncoder
+
 from config.spider_config import content_url_template, multi_processing_pool_core_count, invalid_keyword
 from config.spider_config import search_url_template, use_request_proxy, request_proxies, comment_url_template
 
