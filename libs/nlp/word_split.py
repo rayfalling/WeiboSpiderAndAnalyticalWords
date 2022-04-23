@@ -80,8 +80,14 @@ def word_split(origin_string: str, drop_conjunction: bool = True, drop_particle:
 
     segments = jieba.posseg.cut(delete_punt(origin_string), use_paddle=True, HMM=True)
     for segment, flag in segments:
-        if flag in __switch_flags and not __switch_flags[flag]:
-            word_list.append(segment)
+        if segment.strip() == "":
+            continue
+
+        if flag in __switch_flags:
+            if not __switch_flags[flag]:
+                word_list.append(segment)
+            else:
+                continue
         elif segment not in STOPWORDS:
             word_list.append(segment)
 
