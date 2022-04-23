@@ -2,7 +2,7 @@
 import typing
 
 from json import JSONEncoder
-from datetime import datetime, time
+from datetime import datetime
 
 
 class CommentData(object):
@@ -29,6 +29,12 @@ class CommentData(object):
         :return: 有效评论数
         """
         return len(self.comment)
+
+    def __repr__(self):
+        return str({
+            "count": self.count,
+            "comment": self.comment
+        })
 
 
 class PostData(object):
@@ -107,6 +113,19 @@ class PostData(object):
         """
         return self.__post_origin_url
 
+    def __repr__(self):
+        return str({
+            "mid": self.mid,
+            "time": self.time.strftime("%Y-%m-%d %H:%M:%S"),
+            "tags": self.tags,
+            "text": self.content,
+            "userid": self.user_id,
+            "username": self.username,
+            "reposts_count": self.reposts_count,
+            "attitudes_count": self.attitudes_count,
+            "comment": self.comment
+        })
+
 
 class PostDataEncoder(JSONEncoder):
     def default(self, obj: PostData):
@@ -121,7 +140,7 @@ class PostDataEncoder(JSONEncoder):
                 "reposts_count": obj.reposts_count,
                 "attitudes_count": obj.attitudes_count,
 
-                "comment":{
+                "comment": {
                     "comments_count": obj.comment.count,
                     "comments_list": obj.comment.comment,
                 }

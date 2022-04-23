@@ -10,6 +10,13 @@ class PostDataContent(object):
         self.content = content
         self.comments: list[str] = comments
 
+    def __repr__(self):
+        return str({
+            "id": self.id,
+            "content": self.content,
+            "comments": self.comments
+        })
+
 
 class WordFrequency(object):
     """
@@ -35,3 +42,11 @@ class WordFrequency(object):
         self.count: int = count
         # 情感倾向
         self.emotion: int = emotion
+
+    def __repr__(self):
+        return str({
+            "search_key_id": self.search_key_id,
+            "key": self.key,
+            "count": self.count,
+            "emotion": self.emotion
+        })
