@@ -28,4 +28,4 @@ def main():
     # 创建数据库相关
     init_database()
     # 启动Flask
-    app.run("0.0.0.0", port=8080, debug=GLOBAL_DEBUG)
+    app.run("0.0.0.0", port=8080, debug=GLOBAL_DEBUG, threaded=True)

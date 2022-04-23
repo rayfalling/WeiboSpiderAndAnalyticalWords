@@ -2,15 +2,18 @@ import typing
 
 from sqlalchemy.orm import scoped_session
 
+from . import query_or_insert_search_key_id
+
 from ..core import db
 from ..database_model import SpiderOriginPostData, SpiderOriginCommentData
 
+from libs import FormatLogger
 from libs.data_model import PostData, CommentData
 
-__all__ = ("insert_all_data",)
+__all__ = ("insert_all_post_data",)
 
 
-def insert_all_data(post_data_list: typing.List[PostData]):
+def insert_all_post_data(post_data_list: typing.List[PostData]):
     """
     将爬虫结果写入数据库
     全量查询一次数据库, 获取当前数据库内容副本, 再次去重
@@ -18,6 +21,12 @@ def insert_all_data(post_data_list: typing.List[PostData]):
     :param post_data_list: 爬虫获取的数据结果
     :return:
     """
+    if len(post_data_list) == 0:
+        return 0
+
+    search_key = post_data_list[0].search_key
+    search_key_id = query_or_insert_search_key_id(search_key)
+
     session: scoped_session = db.create_scoped_session(None)
     database_post_data: list[SpiderOriginPostData] = query_all_post(session)
     mid: list[int] = [item.mid for item in database_post_data]
@@ -33,21 +42,26 @@ def insert_all_data(post_data_list: typing.List[PostData]):
             insert_comment_data(session, find_data.id, item.comment)
             post_number -= 1
         else:
-            insert_post_data(session, item)
+            if item.search_key != search_key:
+                FormatLogger.error("Database", "Search key not equal in post_data_list, skipping...")
+                continue
+
+            insert_post_data(session, item, search_key_id)
     session.commit()
 
     return post_number
 
 
-def insert_post_data(session: scoped_session, post_data: PostData):
+def insert_post_data(session: scoped_session, post_data: PostData, key_id: int):
     """
     将单条数据写入数据库
 
     :param session: 数据库连接会话
     :param post_data: 提交数据
+    :param key_id: 搜索关键词Id
     :return:
     """
-    origin_data = SpiderOriginPostData(post_data)
+    origin_data = SpiderOriginPostData(post_data, key_id)
     session.add(origin_data)
     session.commit()
     insert_comment_data(session, origin_data.id, post_data.comment)
@@ -63,10 +77,10 @@ def insert_comment_data(session: scoped_session, post_id: int, comment_data: Com
     :return:
     """
     database_comment_data: list[SpiderOriginCommentData] = query_comment_with_id(session, post_id)
-    mid: list[int] = [item.mid for item in database_comment_data]
+    comment_id_list: list[int] = [item.comment_id for item in database_comment_data]
 
     for key, content in comment_data.comment.items():
-        if key in mid:
+        if key in comment_id_list:
             find_data = next((data for data in database_comment_data if data.comment_id == key), None)
 
             if None is find_data:
