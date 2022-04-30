@@ -20,7 +20,7 @@
           </n-form>
         </div>
         <n-space vertical align="center" style="padding-bottom: 16px">
-          <n-button circle style="padding: 8px 128px" type="primary" size="large">
+          <n-button circle style="padding: 8px 128px" type="primary" size="large" @click="onLogin">
             登&nbsp;&nbsp;&nbsp;&nbsp;录
           </n-button>
           <n-button text type="info" @click="onRegisterClicked">
@@ -34,9 +34,9 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
-import {useRouter} from 'vue-router'
-import {NLayout, NCard, NSpace, NForm, NFormItem, NInput, NButton} from "naive-ui";
+import {ref, inject} from "vue";
+import {useRouter} from "vue-router"
+import {NLayout, NCard, NSpace, NForm, NFormItem, NInput, NButton, useMessage} from "naive-ui";
 
 const label_width = 64;
 const formRef = ref(null);
@@ -45,6 +45,31 @@ const model = ref({
   username: "",
   password: ""
 });
+
+const message = useMessage();
+const axios = inject('axios')
+
+const onLogin = () => {
+  if (model.value.username === "" || model.value.password === "") {
+    message.error("用户名或密码为空");
+    return;
+  }
+
+  axios.post("/api/login", {
+        Username: model.value.username,
+        Password: model.value.password
+      }
+  ).then(response => {
+    if (response.data.status === 0) {
+      message.info(response.data.message)
+      // TODO jump to index
+    } else {
+      message.error(response.data.message)
+    }
+  }).catch(() => {
+    message.error("网络错误");
+  })
+}
 
 const router = useRouter()
 

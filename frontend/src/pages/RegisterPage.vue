@@ -29,10 +29,10 @@
             </n-form>
           </div>
           <n-space vertical align="center" style="padding-bottom: 16px">
-            <n-button circle style="padding: 8px 128px" type="primary" size="large">
+            <n-button circle style="padding: 8px 128px" type="primary" size="large" @click="onRegister">
               注&nbsp;&nbsp;&nbsp;&nbsp;册
             </n-button>
-            <n-button text type="info" @click="onRegisterClicked">
+            <n-button text type="info" @click="onLoginClick">
               已有账号？
             </n-button>
           </n-space>
@@ -44,9 +44,9 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {ref, inject} from "vue";
 import {useRouter} from 'vue-router'
-import {NLayout, NCard, NSpace, NForm, NFormItem, NInput, NButton, NConfigProvider} from "naive-ui";
+import {NLayout, NCard, NSpace, NForm, NFormItem, NInput, NButton, NConfigProvider, useMessage} from "naive-ui";
 
 const label_width = 64;
 const formRef = ref(null);
@@ -67,6 +67,10 @@ function validatePasswordSame(rule, value) {
   return value === model.value.password;
 }
 
+function validatePhoneNumber(rule, value) {
+  return value.length === 11;
+}
+
 function handlePasswordInput() {
   if (model.value.reenteredPassword) {
     reenterPassword.value?.validate({trigger: "password-input"});
@@ -74,6 +78,22 @@ function handlePasswordInput() {
 }
 
 const rules = {
+  username: [
+    {
+      required: true,
+      message: "请输入账号"
+    }, {
+      validator: validatePhoneNumber,
+      required: true,
+      message: "手机号长度为11位"
+    }
+  ],
+  nickname: [
+    {
+      required: true,
+      message: "请输入昵称"
+    }
+  ],
   password: [
     {
       required: true,
@@ -85,13 +105,11 @@ const rules = {
       required: true,
       message: "请再次输入密码",
       trigger: ["input", "blur"]
-    },
-    {
+    }, {
       validator: validatePasswordStartWith,
       message: "两次密码输入不一致",
       trigger: "input"
-    },
-    {
+    }, {
       validator: validatePasswordSame,
       message: "两次密码输入不一致",
       trigger: ["blur", "password-input"]
@@ -105,10 +123,36 @@ const themeOverrides = {
   },
 }
 
-const router = useRouter()
+const router = useRouter();
+const message = useMessage();
+const axios = inject('axios');
 
-const onRegisterClicked = () => {
+const onLoginClick = () => {
   router.push({path: "/login"})
+}
+
+const onRegister = () => {
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      axios.post("/api/register", {
+            Username: model.value.username,
+            Nickname: model.value.nickname,
+            Password: model.value.password
+          }
+      ).then(response => {
+        if (response.data.status === 0) {
+          message.info(response.data.message)
+          onLoginClick();
+        } else {
+          message.error(response.data.message)
+        }
+      }).catch(() => {
+        message.error("网络错误");
+      })
+    } else {
+      message.error("注册失败");
+    }
+  })
 }
 
 </script>

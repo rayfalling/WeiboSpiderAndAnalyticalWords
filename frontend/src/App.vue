@@ -1,17 +1,19 @@
 <template>
-  <n-config-provider :theme-overrides="themeOverrides">
-    <n-layout>
-      <NavBar></NavBar>
-      <n-layout style="height: calc(100vh - 72px)" has-sider>
-        <router-view class="view"/>
+  <n-message-provider>
+    <n-config-provider :theme-overrides="themeOverrides">
+      <n-layout>
+        <NavBar></NavBar>
+        <n-layout style="height: calc(100vh - 72px)" has-sider>
+          <router-view class="view"/>
+        </n-layout>
       </n-layout>
-    </n-layout>
-  </n-config-provider>
+    </n-config-provider>
+  </n-message-provider>
 </template>
 
 <script setup>
 import NavBar from "@/components/NavBar"
-import {NLayout, NConfigProvider} from "naive-ui";
+import {NLayout, NConfigProvider, NMessageProvider} from "naive-ui";
 
 const themeOverrides = {
   Layout: {
