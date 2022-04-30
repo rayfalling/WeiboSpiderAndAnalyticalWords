@@ -1,7 +1,7 @@
 from flask import Flask
 
 from .core import app, db
-from .router import admin_router
+from .router import user_router, admin_router
 
 from config.flask_config import GLOBAL_DEBUG
 
@@ -18,6 +18,7 @@ def init_database():
 
 
 def init(flask_app: Flask):
+    flask_app.register_blueprint(user_router)
     flask_app.register_blueprint(admin_router)
 
 
@@ -28,4 +29,4 @@ def main():
     # 创建数据库相关
     init_database()
     # 启动Flask
-    app.run("0.0.0.0", port=8080, debug=GLOBAL_DEBUG, threaded=True)
+    app.run("0.0.0.0", port=8088, debug=GLOBAL_DEBUG, threaded=True)
