@@ -6,9 +6,6 @@ import os
 # 全局调试开关
 GLOBAL_DEBUG = True
 
-# jieba分词多线程加速
-MULTI_PROCESS_JIEBA = False
-
 # 线程池最大数量
 THREAD_MAX_COUNT = os.cpu_count()
 

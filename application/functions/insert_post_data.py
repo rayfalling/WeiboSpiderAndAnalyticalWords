@@ -13,7 +13,7 @@ from libs.data_model import PostData, CommentData
 __all__ = ("insert_all_post_data",)
 
 
-def insert_all_post_data(post_data_list: typing.List[PostData]):
+def insert_all_post_data(post_data_list: typing.List[PostData]) -> list[int]:
     """
     将爬虫结果写入数据库
     全量查询一次数据库, 获取当前数据库内容副本, 再次去重
@@ -22,7 +22,7 @@ def insert_all_post_data(post_data_list: typing.List[PostData]):
     :return:
     """
     if len(post_data_list) == 0:
-        return 0
+        return []
 
     search_key = post_data_list[0].search_key
     search_key_id = query_or_insert_search_key_id(search_key)
@@ -31,7 +31,7 @@ def insert_all_post_data(post_data_list: typing.List[PostData]):
     database_post_data: list[SpiderOriginPostData] = query_all_post(session)
     mid: list[int] = [item.mid for item in database_post_data]
 
-    post_number = len(post_data_list)
+    post_modify_list = []
     for item in post_data_list:
         if item.mid in mid:
             find_data = next((data for data in database_post_data if data.mid == item.mid), None)
@@ -40,16 +40,17 @@ def insert_all_post_data(post_data_list: typing.List[PostData]):
                 continue
 
             insert_comment_data(session, find_data.id, item.comment)
-            post_number -= 1
+            post_modify_list.append(find_data.id)
         else:
             if item.search_key != search_key:
                 FormatLogger.error("Database", "Search key not equal in post_data_list, skipping...")
                 continue
 
-            insert_post_data(session, item, search_key_id)
+            data_id = insert_post_data(session, item, search_key_id)
+            post_modify_list.append(data_id)
     session.commit()
 
-    return post_number
+    return post_modify_list
 
 
 def insert_post_data(session: scoped_session, post_data: PostData, key_id: int):
@@ -65,6 +66,7 @@ def insert_post_data(session: scoped_session, post_data: PostData, key_id: int):
     session.add(origin_data)
     session.commit()
     insert_comment_data(session, origin_data.id, post_data.comment)
+    return origin_data.id
 
 
 def insert_comment_data(session: scoped_session, post_id: int, comment_data: CommentData):

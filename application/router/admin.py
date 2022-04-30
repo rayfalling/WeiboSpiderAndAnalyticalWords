@@ -5,15 +5,13 @@ from flask import Blueprint, request, jsonify
 from libs import fetch_pages, FormatLogger, word_split, map_sentiment_to_int_emotion
 from libs.data_model import PostData, PostDataContent, WordFrequency
 
-from config.flask_config import MULTI_PROCESS_JIEBA
-
 from .common import process_after_request, process_login_status
 
-from ..thread_pool import submit_function_async, parallel_function_with_waiting_result
+from ..thread_pool import submit_function_async
 from ..functions import insert_all_post_data, insert_all_word_split_data, query_all_post_and_comment_by_keyword
 
 admin_router = Blueprint("admin", __name__)
-admin_router.before_request(process_login_status)
+# admin_router.before_request(process_login_status)
 admin_router.after_request(process_after_request)
 
 __all__ = ("admin_router",)
@@ -77,53 +75,29 @@ def spider_update_database(post_list: list[PostData]):
         return
 
     FormatLogger.info("Database", "Writing all spider data to database......")
-    insert_all_post_data(post_list)
+    post_modify_list = insert_all_post_data(post_list)
     FormatLogger.info("Database", "Write all spider data to database finished!")
 
     FormatLogger.info("Database", "Prepare all post data for word split......")
     # 查询已有数据
     process_post_list: list[PostDataContent]
     search_key_id: int
-    process_post_list, search_key_id = query_all_post_and_comment_by_keyword(post_list[0].search_key)
+    process_post_list, search_key_id = query_all_post_and_comment_by_keyword(post_list[0].search_key, post_modify_list)
 
-    process_list = [(item.content, *item.comments) for item in process_post_list]
-    process_list = [string for item in process_list for string in item]
+    process_list = [(item.id, [item.content, *item.comments]) for item in process_post_list]
+    process_list = [(item[0], string) for item in process_list for string in item[1]]
     FormatLogger.info("Database", "Prepare all post data for word split finished!")
 
-    FormatLogger.info("WordSplit", "Start word spilt for all post data......")
-    if MULTI_PROCESS_JIEBA:
-        process_result = parallel_function_with_waiting_result(word_split, process_list)
-    else:
-        process_result = []
-        for word in process_list:
-            process_result.append(word_split(word))
-    FormatLogger.info("WordSplit", "Finish word spilt for all post data!")
-
-    FormatLogger.info("WordSplit", "Start collect word split result")
-    word_dict = dict()
-    for word_split_result in process_result:
-        for key, value in word_split_result.items():
-            if key not in word_dict:
-                word_dict[key] = [value]
-            else:
-                word_dict[key].append(value)
+    FormatLogger.info("WordSplit", "Start word spilt for post data......")
 
     spilt_result_list: list[WordFrequency] = []
-    for word, count_list in word_dict.items():
-        count = 0
-        total_sentiment = 0.0
+    for item in process_list:
+        process_result = word_split(item[1])
 
-        for item in count_list:
-            count += item[0]
-            total_sentiment += item[1]
-
-        if count == 0:
-            continue
-
-        emotion = map_sentiment_to_int_emotion(total_sentiment / count)
-        frequency = WordFrequency(search_key_id, word, count, emotion)
-        spilt_result_list.append(frequency)
-    FormatLogger.info("WordSplit", "Finish collect word split result!")
+        for key, value in process_result.items():
+            frequency = WordFrequency(search_key_id, item[0], key, value[0], value[1])
+            spilt_result_list.append(frequency)
+    FormatLogger.info("WordSplit", "Finish word spilt for post data!")
 
     FormatLogger.info("Database", "Writing all word split data to database......")
     insert_all_word_split_data(spilt_result_list)
