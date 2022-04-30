@@ -12,6 +12,12 @@ MULTI_PROCESS_JIEBA = False
 # 线程池最大数量
 THREAD_MAX_COUNT = os.cpu_count()
 
+# 单次情感权重
+WORD_SENTIMENT_WEIGHT = 0.7
+
+# 中性词权重范围
+NEUTRAL_WORD_RANGE = 0.3
+
 
 # Flask 项目配置
 class AppConfig(object):

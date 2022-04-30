@@ -59,7 +59,7 @@ def fetch_post(query_val: str, page_id: int) -> typing.List[typing.Union[typing.
         next_card = False
         for keyword, force_skip in invalid_keyword.items():
             for text in links:
-                if keyword in text and (simple_content.strip() == "" or force_skip):
+                if keyword in text and (simple_content == "" or force_skip):
                     next_card = True
 
         if next_card:
@@ -111,6 +111,8 @@ def fetch_content_and_commit(blog: PostData) -> PostData:
                     continue
 
                 content, _, _ = clean_text(comment["text"])
+                content = content.strip()
+
                 if content == "":
                     continue
 

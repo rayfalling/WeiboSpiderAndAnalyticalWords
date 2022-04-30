@@ -2,24 +2,23 @@ import json
 
 from flask import Blueprint, request, jsonify
 
-from libs import fetch_pages, FormatLogger, word_split, map_sentiment_to_int_emotion
+from libs import fetch_pages, FormatLogger, word_split
 from libs.data_model import PostData, PostDataContent, WordFrequency
 
 from config.flask_config import MULTI_PROCESS_JIEBA
 
-from .common import process_after_request, process_login_status
+from .common import process_after_request
 
 from ..thread_pool import submit_function_async, parallel_function_with_waiting_result
 from ..functions import insert_all_post_data, insert_all_word_split_data, query_all_post_and_comment_by_keyword
 
 admin_router = Blueprint("admin", __name__)
-admin_router.before_request(process_login_status)
 admin_router.after_request(process_after_request)
 
 __all__ = ("admin_router",)
 
 
-@admin_router.route("/api/admin/spider/update", methods=["POST"])
+@admin_router.route("/admin/spider/update", methods=["POST"])
 def request_spider_update():
     """
     路由--请求爬虫更新
@@ -102,26 +101,15 @@ def spider_update_database(post_list: list[PostData]):
     FormatLogger.info("WordSplit", "Start collect word split result")
     word_dict = dict()
     for word_split_result in process_result:
-        for key, value in word_split_result.items():
+        for key, count in word_split_result.items():
             if key not in word_dict:
-                word_dict[key] = [value]
+                word_dict[key] = count
             else:
-                word_dict[key].append(value)
+                word_dict[key] += count
 
     spilt_result_list: list[WordFrequency] = []
-    for word, count_list in word_dict.items():
-        count = 0
-        total_sentiment = 0.0
-
-        for item in count_list:
-            count += item[0]
-            total_sentiment += item[1]
-
-        if count == 0:
-            continue
-
-        emotion = map_sentiment_to_int_emotion(total_sentiment / count)
-        frequency = WordFrequency(search_key_id, word, count, emotion)
+    for word, final_result in word_dict.items():
+        frequency = WordFrequency(search_key_id, word, final_result)
         spilt_result_list.append(frequency)
     FormatLogger.info("WordSplit", "Finish collect word split result!")
 
