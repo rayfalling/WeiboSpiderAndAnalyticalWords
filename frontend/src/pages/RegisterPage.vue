@@ -125,7 +125,7 @@ const themeOverrides = {
 
 const router = useRouter();
 const message = useMessage();
-const axios = inject('axios');
+const axios = inject("axios")
 
 const onLoginClick = () => {
   router.push({path: "/login"})

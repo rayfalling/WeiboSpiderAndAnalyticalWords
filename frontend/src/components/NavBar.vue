@@ -45,7 +45,7 @@ const rightButtonText = ref("登录");
 const route = useRoute()
 const router = useRouter()
 
-const axios = inject('axios');
+const axios = inject("axios")
 const login_status = inject("login")
 
 const onIndex = () => {

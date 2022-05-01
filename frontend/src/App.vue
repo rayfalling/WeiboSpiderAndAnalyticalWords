@@ -23,6 +23,9 @@ const themeOverrides = {
   },
   Divider: {
     color: "#CFCFCF"
+  },
+  List:{
+    borderColor: "#CECECE"
   }
 }
 

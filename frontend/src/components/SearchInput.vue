@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import {ref, toRefs} from "vue";
+import {ref, toRefs, watch} from "vue";
 import {NDivider, NInput, NButton, NIcon} from "naive-ui";
 
 export default {
@@ -40,6 +40,12 @@ export default {
 
     const onSearchClicked = () => {
       context.emit("on-search-clicked", searchContent.value)
+    }
+
+    watch(() => props.content, updateFormValue)
+
+    function updateFormValue(value) {
+      searchContent.value = value
     }
 
     return {
@@ -60,20 +66,20 @@ export default {
       default() {
         return "请输入搜索内容"
       }
-    } ,
+    },
     width: {
       type: String,
       default() {
         return "480px"
       }
+    },
+    content: {
+      type: String
     }
   }
 }
 </script>
 
 <style scoped>
-.background-image-container img {
-  width: 100vw;
-  height: 100vh;
-}
+
 </style>

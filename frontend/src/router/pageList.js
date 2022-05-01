@@ -1,12 +1,16 @@
 // page list config
+import IndexPage from "@/pages/IndexPage"
+
 import LoginPage from "@/pages/LoginPage"
 import RegisterPage from "@/pages/RegisterPage"
 
+import SearchList from "@/pages/SearchList"
+
 const pageList = {
     "/": {
-        title: "登录",
-        name: "login",
-        component: LoginPage
+        title: "首页/搜索",
+        name: "index",
+        component: IndexPage
     },
     "login": {
         title: "登录",
@@ -18,32 +22,11 @@ const pageList = {
         name: "register",
         component: RegisterPage
     },
-    // information: {
-    //     title: "详情",
-    //     name: "information",
-    //     component: Information
-    // },
-    // about: {
-    //     title: "关于",
-    //     name: "about",
-    //     component: About
-    // },
-    // more: {
-    //     title: "更多",
-    //     name: "more",
-    //     subpages: {
-    //         setting: {
-    //             title: "设置",
-    //             name: "setting",
-    //             component: Setting
-    //         },
-    //         other: {
-    //             title: "其他",
-    //             name: "other",
-    //             component: Other
-    //         },
-    //     }
-    // }
+    "search": {
+        title: "资讯列表",
+        name: "search",
+        component: SearchList
+    },
 };
 
 export default pageList;

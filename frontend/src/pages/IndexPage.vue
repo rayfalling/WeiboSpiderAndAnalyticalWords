@@ -19,15 +19,14 @@ import BackgroundImage from "@/components/BackgroundImage";
 
 const router = useRouter();
 const message = useMessage();
-const axios = inject('axios');
+const axios = inject("axios")
 
 const onSearch = keyword => {
   if (keyword == null || keyword === "") {
     message.error("搜索内容为空")
   } else {
-    axios.post("/api/search", {Keyword: keyword}).then(response => {
-      console.log(response)
-    })
+    // jump to search page
+    router.push({path: "/search", query:{keyword: keyword}})
   }
 }
 

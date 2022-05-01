@@ -48,7 +48,7 @@ const model = ref({
 
 const router = useRouter()
 const message = useMessage();
-const axios = inject('axios')
+const axios = inject("axios")
 const login_status = inject("login")
 
 const onLogin = () => {
