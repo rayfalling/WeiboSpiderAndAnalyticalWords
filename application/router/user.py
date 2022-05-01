@@ -140,5 +140,11 @@ def query_login():
     else:
         response_data["status"] = 0
         response_data["message"] = "用户已登录"
+        response_data["data"] = {
+            "avatar": session["avatar"],
+            "username": session["username"],
+            "nickname": session["nickname"],
+            "user_type": session["user_type"],
+        }
 
     return jsonify(response_data)

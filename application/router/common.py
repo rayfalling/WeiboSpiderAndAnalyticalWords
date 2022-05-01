@@ -19,4 +19,5 @@ def process_login_status():
     if session.get("login_status") is None or not session.get("login_status"):
         return abort(401)
 
+    session.permanent = True
     return

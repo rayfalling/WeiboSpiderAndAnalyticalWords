@@ -5,7 +5,7 @@ from ..database_model import UserInfo
 
 from libs import FormatLogger, UserData
 
-__all__ = ("query_user_login","insert_user_register")
+__all__ = ("query_user_login", "insert_user_register")
 
 
 def query_user_login(user: UserData, password: str) -> UserData:

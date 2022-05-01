@@ -2,7 +2,7 @@ import json
 
 from flask import Blueprint, request, jsonify
 
-from libs import fetch_pages, FormatLogger, word_split, map_sentiment_to_int_emotion
+from libs import fetch_pages, FormatLogger, word_split
 from libs.data_model import PostData, PostDataContent, WordFrequency
 
 from .common import process_after_request, process_login_status
@@ -11,7 +11,7 @@ from ..thread_pool import submit_function_async
 from ..functions import insert_all_post_data, insert_all_word_split_data, query_all_post_and_comment_by_keyword
 
 admin_router = Blueprint("admin", __name__)
-# admin_router.before_request(process_login_status)
+admin_router.before_request(process_login_status)
 admin_router.after_request(process_after_request)
 
 __all__ = ("admin_router",)
