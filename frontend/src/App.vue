@@ -12,14 +12,29 @@
 </template>
 
 <script setup>
-import NavBar from "@/components/NavBar"
+import {ref, provide} from "vue";
 import {NLayout, NConfigProvider, NMessageProvider} from "naive-ui";
+
+import NavBar from "@/components/NavBar"
 
 const themeOverrides = {
   Layout: {
     colorEmbedded: "#F0F0F5"
   },
+  Divider: {
+    color: "#CFCFCF"
+  }
 }
+
+const login_status = ref({
+  login: false,
+
+  username: "",
+  nickname: "",
+  user_type: 0,
+})
+
+provide("login", login_status)
 </script>
 
 <style>

@@ -35,8 +35,8 @@
 </template>
 
 <script setup>
-import {ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router"
+import {ref, watch, inject, onMounted} from "vue";
 import {NSpace, NImage, NButton, NLayoutHeader} from "naive-ui";
 
 let jumpUrl = "/login"
@@ -44,6 +44,9 @@ const rightButtonText = ref("登录");
 
 const route = useRoute()
 const router = useRouter()
+
+const axios = inject('axios');
+const login_status = inject("login")
 
 const onIndex = () => {
   router.push({path: "/"})
@@ -53,13 +56,33 @@ const rightButtonClick = () => {
   router.push({path: jumpUrl})
 }
 
-if (route.fullPath === "/login" || route.fullPath === "/") {
-  rightButtonText.value = "注册";
-  jumpUrl = "/register";
-} else if (route.fullPath === "/register") {
-  rightButtonText.value = "登录";
-  jumpUrl = "/login";
+onMounted(() => {
+  axios.post("/api/login/status").then(response => {
+    if (response.data.status === 0) {
+      login_status.value.login = true
+      login_status.value.username = response.data.data.username
+      login_status.value.nickname = response.data.data.nickname
+      login_status.value.user_type = response.data.data.user_type
+    }
+
+    update(route.fullPath)
+  })
+});
+
+function update(path) {
+  if (path === "/login") {
+    rightButtonText.value = "注册";
+    jumpUrl = "/register";
+  } else if (path === "/register") {
+    rightButtonText.value = "登录";
+    jumpUrl = "/login";
+  } else if (login_status.value.login) {
+    rightButtonText.value = "我的";
+    jumpUrl = "/user/" + login_status.value.username;
+  }
 }
+
+update(route.fullPath);
 
 watch(
     () => route.fullPath,
@@ -71,6 +94,9 @@ watch(
       } else if (path === "/register") {
         rightButtonText.value = "登录";
         jumpUrl = "/login";
+      } else if (login_status.value.login) {
+        rightButtonText.value = "我的";
+        jumpUrl = "/user/" + login_status.value.username;
       }
     }
 )
