@@ -1,9 +1,8 @@
 from flask import Flask
 
+from config.flask_config import GLOBAL_DEBUG
 from .core import app, db, CustomRequestHandler
 from .router import user_router, admin_router, search_router
-
-from config.flask_config import GLOBAL_DEBUG
 
 __all__ = ("main",)
 
@@ -30,4 +29,4 @@ def main():
     # 创建数据库相关
     init_database()
     # 启动Flask
-    app.run("0.0.0.0", port=8088, debug=GLOBAL_DEBUG, threaded=True,  request_handler=CustomRequestHandler)
+    app.run("0.0.0.0", port=8088, debug=GLOBAL_DEBUG, threaded=True, request_handler=CustomRequestHandler)

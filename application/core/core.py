@@ -6,7 +6,7 @@ from libs.logger.logging import consoleHandler, fileHandler
 
 
 # core app config here
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../../static")
 app.config.from_object(AppConfig)
 
 app.logger.removeHandler(default_handler)

@@ -1,4 +1,5 @@
 import json
+import random
 
 from flask import Blueprint, request, jsonify, session
 
@@ -100,7 +101,10 @@ def request_register():
         response_data["message"] = "参数错误"
         return jsonify(response_data)
 
-    user: UserData = UserData(request_username, request_nickname, "", 1)
+    avatar_index = int(random.random() * 100) % 5 + 1
+    avatar_url = f"static/avatar{avatar_index}.png"
+
+    user: UserData = UserData(request_username, request_nickname, avatar_url, 1)
     result = insert_user_register(user, request_password)
 
     if not result:
