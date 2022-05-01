@@ -17,18 +17,17 @@
               </n-h1>
             </template>
             <n-list-item v-for="(item, index) in dataList" :item="item" :index="index" :key="item.id">
-              <router-link to="/post/detail" #="{ navigate, href }" custom>
-
-                <n-a tag="div" :underline="false" :href="href + '/' + item.id" @click="navigate">
+              <router-link :to="'/post/detail/' + item.id" #="{ navigate, href }" custom>
+                <n-a tag="div" :underline="false" :href="href" @click="navigate">
                   <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
                     <div>
                       {{ index }}
                       <span style="padding-left: 16px">
-                  {{ spilt_content(item.content) }}
-                  </span>
+                      {{ spilt_content(item.content) }}
+                      </span>
                       <span v-if="item.tags.length !== 0" style="padding-left: 16px">
-                  {{ item.tags }}
-                  </span>
+                      {{ item.tags }}
+                      </span>
                     </div>
                     <div>
                       {{ str_time(item.time) }}

@@ -24,7 +24,7 @@ const themeOverrides = {
   Divider: {
     color: "#CFCFCF"
   },
-  List:{
+  List: {
     borderColor: "#CECECE"
   }
 }
@@ -32,6 +32,7 @@ const themeOverrides = {
 const login_status = ref({
   login: false,
 
+  avatar: "",
   username: "",
   nickname: "",
   user_type: 0,

@@ -64,6 +64,8 @@ const onLogin = () => {
   ).then(response => {
     if (response.data.status === 0) {
       login_status.value.login = true
+
+      login_status.value.avatar = response.data.data.avatar
       login_status.value.username = response.data.data.username
       login_status.value.nickname = response.data.data.nickname
       login_status.value.user_type = response.data.data.user_type
