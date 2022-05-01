@@ -27,7 +27,12 @@ def query_search_by_keyword(keyword: str) -> list[SearchResult]:
 
     search_result_list = []
     for item in result:
-        search_result = SearchResult(item.id, item.tags, item.content, item.time)
+        tags = item.tags.split("#")
+        if tags[0] == "":
+            tags_str = ""
+        else:
+            tags_str = "".join(["#" + item + "# " for item in tags])
+        search_result = SearchResult(item.id, tags_str, item.content, item.time)
         search_result_list.append(search_result)
 
     sorted(search_result_list, key=lambda rs: rs.time, reverse=True)

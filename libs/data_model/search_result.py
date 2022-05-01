@@ -7,7 +7,7 @@ class SearchResult(object):
     搜索结果
     """
 
-    def __init__(self, post_id: int, tags: list[str], content: str, time: datetime):
+    def __init__(self, post_id: int, tags: str, content: str, time: datetime):
         """
 
         :param post_id: 微博数据库存储Id

@@ -52,8 +52,8 @@ def request_login():
         response_data["data"]["result"].append({
             "id": item.post_id,
             "tags": item.tags,
-            "time": item.time,
-            "content": item.content
+            "content": item.content,
+            "time": item.time.strftime("%Y-%m-%d %H:%M:%S"),
         })
 
     return jsonify(response_data)
