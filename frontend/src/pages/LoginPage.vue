@@ -1,8 +1,6 @@
 <template>
   <n-layout embedded class="full_page">
-    <div class="background-image-container">
-      <img :src="require('@/assets/bg.jpg')" alt=""/>
-    </div>
+    <BackgroundImage />
     <n-space justify="space-between" align="center" class="full_page">
       <div></div>
       <n-card bordered embedded hoverable title="登&nbsp;&nbsp;&nbsp;&nbsp;录"
@@ -34,9 +32,11 @@
 </template>
 
 <script setup>
-import {ref, inject} from "vue";
+import {inject, ref} from "vue";
 import {useRouter} from "vue-router"
-import {NLayout, NCard, NSpace, NForm, NFormItem, NInput, NButton, useMessage} from "naive-ui";
+import {NButton, NCard, NForm, NFormItem, NInput, NLayout, NSpace, useMessage} from "naive-ui";
+
+import BackgroundImage from "@/components/BackgroundImage";
 
 const label_width = 64;
 const formRef = ref(null);
@@ -46,8 +46,10 @@ const model = ref({
   password: ""
 });
 
+const router = useRouter()
 const message = useMessage();
 const axios = inject('axios')
+const login_status = inject("login")
 
 const onLogin = () => {
   if (model.value.username === "" || model.value.password === "") {
@@ -61,8 +63,14 @@ const onLogin = () => {
       }
   ).then(response => {
     if (response.data.status === 0) {
+      login_status.value.login = true
+      login_status.value.username = response.data.data.username
+      login_status.value.nickname = response.data.data.nickname
+      login_status.value.user_type = response.data.data.user_type
+
       message.info(response.data.message)
-      // TODO jump to index
+      message.info("欢迎回来: " + response.data.data.nickname)
+      router.push({path: "/"})
     } else {
       message.error(response.data.message)
     }
@@ -70,8 +78,6 @@ const onLogin = () => {
     message.error("网络错误");
   })
 }
-
-const router = useRouter()
 
 const onRegisterClicked = () => {
   router.push({path: "/register"})
@@ -90,18 +96,5 @@ const onRegisterClicked = () => {
   padding: 16px 8px;
   width: 360px;
   text-align: center;
-}
-
-.background-image-container {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: absolute;
-}
-
-.background-image-container img {
-  width: 100vw;
-  height: 100vh;
 }
 </style>

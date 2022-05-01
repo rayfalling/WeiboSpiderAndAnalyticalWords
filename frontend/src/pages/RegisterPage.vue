@@ -1,8 +1,6 @@
 <template>
   <n-layout class="full_page">
-    <div class="background-image-container">
-      <img :src="require('@/assets/bg.jpg')" alt=""/>
-    </div>
+    <BackgroundImage />
     <n-space justify="space-between" align="center" class="full_page">
       <div></div>
       <n-config-provider :theme-overrides="themeOverrides">
@@ -47,6 +45,8 @@
 import {ref, inject} from "vue";
 import {useRouter} from 'vue-router'
 import {NLayout, NCard, NSpace, NForm, NFormItem, NInput, NButton, NConfigProvider, useMessage} from "naive-ui";
+
+import BackgroundImage from "@/components/BackgroundImage";
 
 const label_width = 64;
 const formRef = ref(null);
@@ -168,18 +168,5 @@ const onRegister = () => {
   padding: 16px 8px;
   width: 360px;
   text-align: center;
-}
-
-.background-image-container {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: absolute;
-}
-
-.background-image-container img {
-  width: 100vw;
-  height: 100vh;
 }
 </style>
