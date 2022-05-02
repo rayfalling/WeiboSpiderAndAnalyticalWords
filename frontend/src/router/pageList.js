@@ -4,6 +4,7 @@ import IndexPage from "@/pages/IndexPage"
 import LoginPage from "@/pages/LoginPage"
 import RegisterPage from "@/pages/RegisterPage"
 
+import PostDetail from "@/pages/PostDetail"
 import SearchList from "@/pages/SearchList"
 
 const pageList = {
@@ -26,6 +27,11 @@ const pageList = {
         title: "资讯列表",
         name: "search",
         component: SearchList
+    },
+    "post/detail/:id(\\d+)": {
+        title: "资讯详情",
+        name: "post_detail",
+        component: PostDetail
     },
 };
 
