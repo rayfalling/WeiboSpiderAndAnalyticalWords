@@ -16,9 +16,9 @@ class UserInfo(db.Model):
     # 全局ID 自增
     id = db.Column(INTEGER, index=True, primary_key=True, autoincrement=True, nullable=False)
     # 用户ID 手机号
-    username = db.Column(VARCHAR(11), nullable=False)
+    username = db.Column(VARCHAR(11), nullable=False, unique=True)
     # 用户名 昵称
-    nickname = db.Column(VARCHAR(64), nullable=False)
+    nickname = db.Column(VARCHAR(64), nullable=False, unique=True)
     # 用户密码
     password = db.Column(VARCHAR(64), nullable=False)
     # 用户头像

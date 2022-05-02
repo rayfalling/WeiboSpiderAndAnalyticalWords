@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from sqlalchemy.orm import scoped_session
 
 from ..core import db
@@ -44,11 +45,13 @@ def insert_user_register(user: UserData, password: str) -> bool:
     :return:
     """
     session: scoped_session = db.create_scoped_session(None)
-    result = session.query(UserInfo).filter(UserInfo.username == user.username).all()
+    result = session.query(UserInfo).filter(
+        or_(UserInfo.username == user.username, UserInfo.nickname == user.nickname)
+    ).all()
 
     if len(result) > 0:
         FormatLogger.warning(
-            "Database", "Username already exist in database. Username: {}".format(user.username)
+            "Database", "Username or nickname already exist in database. Username: {}".format(user.username)
         )
         return False
     else:
