@@ -4,6 +4,8 @@ import IndexPage from "@/pages/IndexPage"
 import LoginPage from "@/pages/LoginPage"
 import RegisterPage from "@/pages/RegisterPage"
 
+import TagTrend from "@/pages/TagTrend"
+
 import PostDetail from "@/pages/PostDetail"
 import SearchList from "@/pages/SearchList"
 
@@ -22,6 +24,11 @@ const pageList = {
         title: "注册",
         name: "register",
         component: RegisterPage
+    },
+    "trend": {
+        title: "企业热榜",
+        name: "trend",
+        component: TagTrend
     },
     "search": {
         title: "资讯列表",

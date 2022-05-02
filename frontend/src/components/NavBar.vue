@@ -11,22 +11,19 @@
       </div>
       <div style="width: 320px">
         <n-space justify="space-around" align="center" size="large">
-          <router-link to="/" #="{ navigate, href }" custom>
-            <n-button style="font-size: 1.25rem" dashed tag="a" strong size="large">
-              企业热榜
-            </n-button>
-          </router-link>
-          <router-link to="/" #="{ navigate, href }" custom>
-            <n-button style="font-size: 1.25rem" dashed tag="a" strong size="large">
-              最新动态
-            </n-button>
-          </router-link>
+          <n-button style="font-size: 1.25rem" dashed tag="a" strong size="large" @click="goTrend">
+            企业热榜
+          </n-button>
+          <n-button style="font-size: 1.25rem" dashed tag="a" strong size="large">
+            最新动态
+          </n-button>
         </n-space>
       </div>
       <div style="width: 320px; text-align: right">
         <router-link to="/" #="{ navigate, href }" custom>
           <n-button style="font-size: 1.25rem" circle dashed strong size="large" @click="rightButtonClick">
-            <n-avatar v-if="showAvatar" round :size="48" style="transform: translateY(6px)" :src="avatarSrc" object-fit="cover"/>
+            <n-avatar v-if="showAvatar" round :size="48" style="transform: translateY(6px)" :src="avatarSrc"
+                      object-fit="cover"/>
             <div v-else>
               {{ rightButtonText }}
             </div>
@@ -53,6 +50,10 @@ const router = useRouter()
 
 const axios = inject("axios")
 const login_status = inject("login")
+
+const goTrend = () => {
+  router.push({path: "/trend"})
+}
 
 const onIndex = () => {
   router.push({path: "/"})

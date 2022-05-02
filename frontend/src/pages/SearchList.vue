@@ -7,7 +7,7 @@
         <n-space v-if="showEmpty" justify="center" align="center" class="fill_full">
           <n-empty description="什么也没有搜索到"/>
         </n-space>
-        <div v-else class="fill_full">
+        <div v-else>
           <n-list bordered>
             <template #header>
               <n-h1 prefix="bar" align-text style="text-align: center">
@@ -21,7 +21,7 @@
                 <n-a tag="div" :underline="false" :href="href" @click="navigate">
                   <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
                     <div>
-                      {{ index }}
+                      {{ index + 1 }}
                       <span style="padding-left: 16px">
                       {{ spilt_content(item.content) }}
                       </span>
@@ -107,7 +107,7 @@ function querySearch() {
     dataList.value = response.data.data.result
     showEmpty.value = response.data.data.result.length === 0
   }).catch(err => {
-    if (err.response.status === 401){
+    if (err.response.status === 401) {
       router.push({path: "/login"})
     }
   })
