@@ -2,11 +2,11 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import scoped_session
 
 from ..core import db
-from ..database_model import SpiderOriginPostData
+from ..database_model import SpiderOriginPostData, SpiderOriginCommentData
 
-from libs import FormatLogger, SearchResult
+from libs import FormatLogger, SearchResult, PostDetail
 
-__all__ = ("query_search_by_keyword",)
+__all__ = ("query_search_by_keyword", "query_post_detail_by_id", )
 
 
 def query_search_by_keyword(keyword: str) -> list[SearchResult]:
@@ -37,3 +37,36 @@ def query_search_by_keyword(keyword: str) -> list[SearchResult]:
 
     sorted(search_result_list, key=lambda rs: rs.time, reverse=True)
     return search_result_list
+
+
+def query_post_detail_by_id(post_id: int) -> PostDetail:
+    """
+    查询搜索关键词
+
+    :param post_id: 搜索关键词
+    :return:
+    """
+    FormatLogger.debug("Database", "Query detail id is {}".format(post_id))
+
+    session: scoped_session = db.create_scoped_session(None)
+    result = session.query(SpiderOriginPostData).filter(SpiderOriginPostData.id == post_id).all()
+
+    if len(result) == 0:
+        FormatLogger.debug("Database", "Query detail id is {}".format(post_id))
+        return PostDetail(-1)
+
+    item = result[0]
+    tags = item.tags.split("#")
+    if tags[0] == "":
+        tags_str = ""
+    else:
+        tags_str = "".join(["#" + item + "# " for item in tags])
+
+    count = (item.attitudes_count, item.comments_count, item.reposts_count)
+    comment_result = session.query(SpiderOriginCommentData).filter(SpiderOriginCommentData.post_id == post_id).all()
+
+    comments = []
+    for comment in comment_result:
+        comments.append(comment.content)
+
+    return PostDetail(item.id, item.username, tags_str, item.content, item.time, count, comments)

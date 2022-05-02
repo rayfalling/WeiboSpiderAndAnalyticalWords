@@ -2,7 +2,7 @@ from flask import Flask
 
 from config.flask_config import GLOBAL_DEBUG
 from .core import app, db, CustomRequestHandler
-from .router import user_router, admin_router, search_router
+from .router import user_router, admin_router, search_router, detail_router
 
 __all__ = ("main",)
 
@@ -20,6 +20,7 @@ def init(flask_app: Flask):
     flask_app.register_blueprint(user_router)
     flask_app.register_blueprint(admin_router)
     flask_app.register_blueprint(search_router)
+    flask_app.register_blueprint(detail_router)
 
 
 # 主启动函数
