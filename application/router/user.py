@@ -97,7 +97,7 @@ def request_register():
     request_password = request_json.get("Password", "")
 
     if request_username == "" or request_password == "" or request_nickname == "":
-        FormatLogger.error("AdminRouter", "Empty request data! Request url is {}".format(request.url))
+        FormatLogger.error("UserRouter", "Empty request data! Request url is {}".format(request.url))
         response_data["message"] = "参数错误"
         return jsonify(response_data)
 
