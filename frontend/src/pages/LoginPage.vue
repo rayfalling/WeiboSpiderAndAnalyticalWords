@@ -3,8 +3,8 @@
     <BackgroundImage />
     <n-space justify="space-between" align="center" class="full_page">
       <div></div>
-      <n-card bordered embedded hoverable title="登&nbsp;&nbsp;&nbsp;&nbsp;录"
-              header-style="text-align: center; font-size: 1.5rem" content-style="padding: 8px;" size="large"
+      <n-card hoverable title="登&nbsp;&nbsp;&nbsp;&nbsp;录"
+              header-style="text-align: center; font-size: 1.5rem" content-style="padding: 8px;"
               style="background-color: rgba(255, 255, 255, 0.2);">
         <div class="card_content">
           <n-form ref="formRef" :model="model" label-placement="left" :label-width="label_width">
@@ -95,7 +95,7 @@ const onRegisterClicked = () => {
 }
 
 .card_content {
-  padding: 16px 8px;
+  padding: 16px 32px 16px 8px;
   width: 360px;
   text-align: center;
 }

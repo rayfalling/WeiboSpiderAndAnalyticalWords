@@ -1,7 +1,7 @@
 <template>
   <n-layout embedded class="full_page">
     <BackgroundImage/>
-    <n-space vertical align="center" class="full_page">
+    <n-space vertical align="center">
       <SearchInput class="search_content" width="560px" @on-search-clicked="onSearch" :content="keyword"/>
       <n-layout position="absolute" class="list_content" :native-scrollbar="false">
         <n-space v-if="showEmpty" justify="center" align="center" class="fill_full">
@@ -17,7 +17,7 @@
               </n-h1>
             </template>
             <n-list-item v-for="(item, index) in dataList" :item="item" :index="index" :key="item.id">
-              <router-link :to="'/post/detail/' + item.id" #="{ navigate, href }" custom>
+              <router-link :to="'/post/detail/' + item.id + '?keyword=' + keyword" #="{ navigate, href }" custom>
                 <n-a tag="div" :underline="false" :href="href" @click="navigate">
                   <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
                     <div>
@@ -55,8 +55,6 @@ const route = useRoute();
 const router = useRouter();
 const message = useMessage();
 const axios = inject("axios")
-
-router.isReady();
 
 const showEmpty = ref(false)
 const keyword = ref(null)
@@ -108,6 +106,10 @@ function querySearch() {
   axios.post("/api/search", {Keyword: keyword.value}).then(response => {
     dataList.value = response.data.data.result
     showEmpty.value = response.data.data.result.length === 0
+  }).catch(err => {
+    if (err.response.status === 401){
+      router.push({path: "/login"})
+    }
   })
 }
 
