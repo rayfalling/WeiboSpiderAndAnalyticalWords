@@ -1,8 +1,6 @@
 # coding: utf-8
 from datetime import datetime
 
-from .weibo_data_fetch import CommentData
-
 
 class SearchResult(object):
     """
@@ -21,6 +19,14 @@ class SearchResult(object):
         self.time = time
         self.post_id = post_id
         self.content = content
+
+    def __repr__(self):
+        return str({
+            "tags": self.tags,
+            "time": self.time.strftime("%Y-%m-%d %H:%M:%S"),
+            "post_id": self.post_id,
+            "content": self.content
+        })
 
 
 class PostDetail(object):
@@ -61,3 +67,17 @@ class PostDetail(object):
         self.reposts_count = count[2]
         # 评论数据
         self.comments = comments
+
+    def __repr__(self):
+        return str({
+            "tags": self.tags,
+            "time": self.time.strftime("%Y-%m-%d %H:%M:%S"),
+            "post_id": self.post_id,
+            "content": self.content,
+
+            "username": self.username,
+            "comments": self.comments,
+            "reposts_count": self.reposts_count,
+            "comments_count": self.comments_count,
+            "attitudes_count": self.attitudes_count,
+        })

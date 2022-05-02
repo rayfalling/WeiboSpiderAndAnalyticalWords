@@ -17,6 +17,21 @@ WORD_SENTIMENT_WEIGHT = 0.7
 # 中性词权重范围
 NEUTRAL_WORD_RANGE = 0.3
 
+# 词条相关微博数量权重
+TAG_TREND_POST_COUNT_WEIGHT = 40
+
+# 词条相关发博作者数去重权重
+TAG_TREND_POST_AUTHOR_WEIGHT = 15
+
+# 词条相关微博点赞量权重
+TAG_TREND_POST_ATTITUDE_WEIGHT = 10
+
+# 词条相关微博转发量权重
+TAG_TREND_POST_REPOST_WEIGHT = 15
+
+# 词条相关微博转发量权重
+TAG_TREND_POST_COMMENT_WEIGHT = 20
+
 
 # Flask 项目配置
 class AppConfig(object):

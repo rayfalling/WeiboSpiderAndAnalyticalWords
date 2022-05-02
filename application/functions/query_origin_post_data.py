@@ -35,7 +35,7 @@ def query_search_by_keyword(keyword: str) -> list[SearchResult]:
         search_result = SearchResult(item.id, tags_str, item.content, item.time)
         search_result_list.append(search_result)
 
-    sorted(search_result_list, key=lambda rs: rs.time, reverse=True)
+    search_result_list.sort(key=lambda rs: rs.time, reverse=True)
     return search_result_list
 
 

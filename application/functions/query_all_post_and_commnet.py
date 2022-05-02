@@ -6,7 +6,7 @@ from ..database_model import SpiderSearchKey, SpiderOriginPostData, SpiderOrigin
 from libs import FormatLogger
 from libs.data_model import PostDataContent
 
-__all__ = ("query_all_post_and_comment_by_keyword",)
+__all__ = ("query_all_post_and_comment_by_keyword", "query_post", )
 
 
 def query_all_post_and_comment_by_keyword(keyword: str, modify_list=None) -> tuple:
@@ -29,7 +29,7 @@ def query_all_post_and_comment_by_keyword(keyword: str, modify_list=None) -> tup
     return query_post(session=session, search_key_id=search_key_id, update_list=modify_list), search_key_id
 
 
-def query_post(session: scoped_session, search_key_id: int, update_list=None):
+def query_post(session: scoped_session, search_key_id: int, update_list=None) -> list[PostDataContent]:
     """
     查询所有的微博数据
 

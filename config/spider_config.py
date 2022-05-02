@@ -46,4 +46,4 @@ invalid_keyword = {
 }
 
 # 固定搜索的关键词
-search_keyword = ["鸿星尔克", ]
+search_keyword = "鸿星尔克"
