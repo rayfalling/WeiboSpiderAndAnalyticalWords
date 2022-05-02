@@ -49,7 +49,8 @@ def insert_all_post_data(post_data_list: typing.List[PostData]) -> list[int]:
             data_id = insert_post_data(session, item, search_key_id)
             post_modify_list.append(data_id)
     session.commit()
-
+    session.close()
+    
     return post_modify_list
 
 

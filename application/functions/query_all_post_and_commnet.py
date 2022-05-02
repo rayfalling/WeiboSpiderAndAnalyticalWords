@@ -26,6 +26,7 @@ def query_all_post_and_comment_by_keyword(keyword: str, modify_list=None) -> tup
     else:
         search_key_id = result[0].id
 
+    session.close()
     return query_post(session=session, search_key_id=search_key_id, update_list=modify_list), search_key_id
 
 

@@ -25,6 +25,8 @@ def query_search_by_keyword(keyword: str) -> list[SearchResult]:
     session: scoped_session = db.create_scoped_session(None)
     result = session.query(SpiderOriginPostData).filter(or_(filter_tag_rule, filter_content_rule)).all()
 
+    session.close()
+
     search_result_list = []
     for item in result:
         tags = item.tags.split("#")
@@ -68,5 +70,7 @@ def query_post_detail_by_id(post_id: int) -> PostDetail:
     comments = []
     for comment in comment_result:
         comments.append(comment.content)
+
+    session.close()
 
     return PostDetail(item.id, item.username, tags_str, item.content, item.time, count, comments)

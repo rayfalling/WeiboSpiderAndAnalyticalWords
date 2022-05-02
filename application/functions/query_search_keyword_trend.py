@@ -48,4 +48,5 @@ def query_search_key_trend(key: str) -> typing.Optional[dict[str, TagTrend]]:
     for key, value in result_dict.items():
         value.update_trend()
 
+    session.close()
     return result_dict

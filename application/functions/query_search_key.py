@@ -29,6 +29,7 @@ def query_or_insert_search_key_id(key: str):
     else:
         search_key_id = result[0].id
 
+    session.close()
     return search_key_id
 
 
@@ -51,6 +52,7 @@ def query_search_key_id(key: str):
     else:
         search_key_id = result[0].id
 
+    session.close()
     return search_key_id
 
 

@@ -21,6 +21,7 @@ def query_user_login(user: UserData, password: str) -> UserData:
     result = session.query(UserInfo).filter(
         UserInfo.username == user.username, UserInfo.password == password
     ).all()
+    session.close()
 
     if len(result) != 1:
         FormatLogger.warning(
@@ -48,6 +49,8 @@ def insert_user_register(user: UserData, password: str) -> bool:
     result = session.query(UserInfo).filter(
         or_(UserInfo.username == user.username, UserInfo.nickname == user.nickname)
     ).all()
+
+    session.close()
 
     if len(result) > 0:
         FormatLogger.warning(

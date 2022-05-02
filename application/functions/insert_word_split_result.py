@@ -44,6 +44,7 @@ def insert_all_word_split_data(word_spilt_list: typing.List[WordFrequency]):
             session.add(origin_data)
 
     session.commit()
+    session.close()
 
 
 def query_all_spilt_result(session: scoped_session, search_key_id: int) -> list[WordSpiltResult]:
