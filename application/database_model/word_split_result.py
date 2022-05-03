@@ -19,7 +19,7 @@ class WordSpiltResult(db.Model):
     # 全局ID 自增
     id = db.Column(INTEGER, index=True, primary_key=True, autoincrement=True, nullable=False)
     # 搜索关键词外键
-    search_key_id = db.Column(INTEGER, ForeignKey("spider_origin_post_data.id"))
+    search_key_id = db.Column(INTEGER, ForeignKey("spider_search_key.id"))
     # 微博数据库Id
     post_id = db.Column(INTEGER, ForeignKey("spider_origin_post_data.id"))
     # 关键词

@@ -10,7 +10,7 @@
             <template #header>
               <n-h1 prefix="bar" align-text style="text-align: center">
                 <n-text type="primary">
-                  企业热缩
+                  企业热搜
                 </n-text>
               </n-h1>
             </template>

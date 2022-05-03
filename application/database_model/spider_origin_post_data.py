@@ -29,7 +29,7 @@ class SpiderOriginPostData(db.Model):
     # 微博文本数据
     content = db.Column(LONGTEXT, nullable=False)
     # 搜索关键词外键
-    search_key_id = db.Column(INTEGER, ForeignKey("spider_origin_post_data.id"))
+    search_key_id = db.Column(INTEGER, ForeignKey("spider_search_key.id"))
     # 发布时间
     time = db.Column(DATETIME, nullable=False)
     # 点赞量
