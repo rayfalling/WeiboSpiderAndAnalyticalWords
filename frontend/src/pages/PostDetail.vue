@@ -21,30 +21,30 @@
                     </n-space>
                     <p style="padding: 0 2rem">{{ post_detail.content }}</p>
                   </div>
-                  <n-space justify="center" align="center">
-                    <div>
-                      <n-icon size="24" style="vertical-align: middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                          <path
-                              d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81c-1.1
+                  <n-space justify="space-between" style="height: 100%">
+                    <div style="width: 120px;"></div>
+                    <n-space justify="center" align="center">
+                      <div>
+                        <n-icon size="24" style="vertical-align: middle">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <path
+                                d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81c-1.1
                           109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34 184.09-143.09
                           183-252.42c-.54-52.67-42.32-96.81-95.08-96.81z"
-                              fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                              stroke-width="32">
-                          </path>
-                        </svg>
-                      </n-icon>
-                      <span style="font-size: 20px; margin-left: 8px; vertical-align: middle">
-                      {{ post_detail.attitudes_count }}
-                    </span>
-                    </div>
-                    <div>
-                      <n-icon size="24" style="vertical-align: middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-                          <path d="M573 421c-23.1 0-41 17.9-41 40s17.9 40 41 40c21.1 0 39-17.9 39-40s-17.9-40-39-40zm-280
+                                fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="32">
+                            </path>
+                          </svg>
+                        </n-icon>
+                        <span class="icon_font">{{ post_detail.attitudes_count }}</span>
+                      </div>
+                      <div>
+                        <n-icon size="24" style="vertical-align: middle">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                            <path d="M573 421c-23.1 0-41 17.9-41 40s17.9 40 41 40c21.1 0 39-17.9 39-40s-17.9-40-39-40zm-280
                         0c-23.1 0-41 17.9-41 40s17.9 40 41 40c21.1 0 39-17.9 39-40s-17.9-40-39-40z" fill="currentColor">
-                          </path>
-                          <path d="M894 345c-48.1-66-115.3-110.1-189-130v.1c-17.1-19-36.4-36.5-58-52.1c-163.7-119-393.5-82.7-513
+                            </path>
+                            <path d="M894 345c-48.1-66-115.3-110.1-189-130v.1c-17.1-19-36.4-36.5-58-52.1c-163.7-119-393.5-82.7-513
                         81c-96.3 133-92.2 311.9 6 439l.8 132.6c0 3.2.5 6.4 1.5 9.4c5.3 16.9 23.3 26.2 40.1 20.9L309 806c33.5
                          11.9 68.1 18.7 102.5 20.6l-.5.4c89.1 64.9 205.9 84.4 313 49l127.1 41.4c3.2 1 6.5 1.6 9.9 1.6c17.7 0
                           32-14.3 32-32V753c88.1-119.6 90.4-284.9 1-408zM323
@@ -52,21 +52,19 @@
                            96.1 161.5 280.6 66 412c-80.1 109.9-223.5 150.5-348 102zm505-17l-8 10l1 104l-98-33l-12 5c-56
                             20.8-115.7 22.5-171 7l-.2-.1C613.7 788.2 680.7 742.2 729 676c76.4-105.3
                              88.8-237.6 44.4-350.4l.6.4c23 16.5 44.1 37.1 62 62c72.6 99.6 68.5 235.2-8 330z"
-                                fill="currentColor">
-                          </path>
-                          <path d="M433 421c-23.1 0-41 17.9-41 40s17.9 40 41 40c21.1 0 39-17.9 39-40s-17.9-40-39-40z"
-                                fill="currentColor">
-                          </path>
-                        </svg>
-                      </n-icon>
-                      <span style="font-size: 20px; margin-left: 8px; vertical-align: middle">
-                      {{ post_detail.comments_count }}
-                    </span>
-                    </div>
-                    <div>
-                      <n-icon size="24" style="vertical-align: middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                          <path d="M13.33 12.838l4.497-4.423l.057-.065a.587.587 0 0 0-.057-.767L13.33
+                                  fill="currentColor">
+                            </path>
+                            <path d="M433 421c-23.1 0-41 17.9-41 40s17.9 40 41 40c21.1 0 39-17.9 39-40s-17.9-40-39-40z"
+                                  fill="currentColor">
+                            </path>
+                          </svg>
+                        </n-icon>
+                        <span class="icon_font">{{ post_detail.comments_count }}</span>
+                      </div>
+                      <div>
+                        <n-icon size="24" style="vertical-align: middle">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M13.33 12.838l4.497-4.423l.057-.065a.587.587 0 0 0-.057-.767L13.33
                          3.162l-.062-.053c-.36-.27-.89-.01-.89.469v2.13l-.225.015c-3.563.282-5.65 2.537-6.148
                          6.627c-.064.525.538.854.928.506c1.431-1.278 2.91-2.072
                          4.445-2.39c.246-.051.493-.09.742-.117l.258-.023v2.096l.005.082c.06.453.609.666.947.334zM12.226
@@ -74,12 +72,31 @@
                           2.002c.298-1.339.807-2.346 1.476-3.067c.83-.895 1.99-1.443 3.563-1.569zM5.5 4A2.5 2.5 0 0 0 3
                            6.5v8A2.5 2.5 0 0 0 5.5 17h8a2.5 2.5 0 0 0 2.5-2.5v-1a.5.5 0 0 0-1 0v1a1.5 1.5 0 0 1-1.5
                            1.5h-8A1.5 1.5 0 0 1 4 14.5v-8A1.5 1.5 0 0 1 5.5 5h3a.5.5 0 0 0 0-1h-3z" fill="currentColor">
-                          </path>
-                        </svg>
-                      </n-icon>
-                      <span style="font-size: 20px; margin-left: 8px; vertical-align: middle">
-                      {{ post_detail.reposts_count }}
-                    </span>
+                            </path>
+                          </svg>
+                        </n-icon>
+                        <span class="icon_font">{{ post_detail.reposts_count }}</span>
+                      </div>
+                    </n-space>
+                    <div>
+                      <n-button icon-placement="left" type="primary" dashed @click="switchCollectStatus">
+                        <template #icon>
+                          <n-icon v-if="collectStatus" size="20" style="vertical-align: middle">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2L9.19
+                              8.63L2 9.24l5.46 4.73L5.82 21z" fill="currentColor"></path>
+                            </svg>
+                          </n-icon>
+                          <n-icon v-else size="20" style="vertical-align: middle">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                              <path d="M22 9.24l-7.19-.62L12 2L9.19 8.63L2 9.24l5.46 4.73L5.82 21L12 17.27L18.18
+                               21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27l1-4.28l-3.32-2.88l4.38-.38L12 6.1l1.71
+                                4.04l4.38.38l-3.32 2.88l1 4.28L12 15.4z" fill="currentColor"></path>
+                            </svg>
+                          </n-icon>
+                        </template>
+                        <span class="icon_font">{{ collectText }}</span>
+                      </n-button>
                     </div>
                   </n-space>
                 </n-space>
@@ -159,7 +176,9 @@ import BackgroundImage from "@/components/BackgroundImage";
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
+
 const axios = inject("axios")
+const login_status = inject("login")
 
 const post_id = ref(-1)
 const dataList = ref([])
@@ -167,6 +186,8 @@ const keyword = ref(null)
 const post_detail = ref({})
 const showEmpty = ref(false)
 const showEmptyRelative = ref(false)
+const collectText = ref("收藏")
+const collectStatus = ref(false)
 
 function spilt_content(content) {
   if (content.length >= 10) {
@@ -184,8 +205,38 @@ const goBack = () => {
   router.push({path: "/search", query: {keyword: keyword.value}})
 }
 
-function querySearch() {
-  axios.post("/api/post/detail", {PostId: post_id.value * 1}).then(response => {
+const switchCollectStatus = () => {
+  if (!collectStatus.value) {
+    axios.post("/api/user/collect/add", {
+      Username: login_status.value.username,
+      PostId: post_id.value * 1
+    }).then(response => {
+      if (response.data.status === -1) {
+        message.error(response.data.message)
+      }
+
+      collectStatus.value = true
+      collectText.value = "取消"
+    })
+  } else {
+    axios.post("/api/user/collect/remove", {
+      Username: login_status.value.username,
+      PostId: post_id.value * 1
+    }).then(response => {
+      if (response.data.status === -1) {
+        message.error(response.data.message)
+      }
+
+      collectStatus.value = false
+      collectText.value = "收藏"
+    })
+  }
+}
+
+function queryDetail() {
+  axios.post("/api/post/detail", {
+    PostId: post_id.value * 1
+  }).then(response => {
     if (response.data.status === -1) {
       message.error(response.data.message)
     } else {
@@ -206,15 +257,41 @@ function querySearch() {
 
       showEmpty.value = post_detail.value.comments.length === 0
     }
-  }).catch(err => {
-    if (err.response.status === 401) {
-      router.push({path: "/login"})
-    }
-  })
+  }).then(() => {
+    axios.post("/api/search/relative", {
+      Keyword: keyword.value, Limit: 5,
+      Current: post_id.value * 1
+    }).then(response => {
+      dataList.value = response.data.data.result
+      showEmptyRelative.value = response.data.data.result.length === 0
+    }).catch(err => {
+      if (err.response.status === 401) {
+        router.push({path: "/login"})
+      }
+    })
+  }).then(() => {
+    axios.post("/api/user/collect/status", {
+      Username: login_status.value.username,
+      PostId: post_id.value * 1
+    }).then(response => {
+      if (response.data.status === -1) {
+        console.log(response.data.message)
+      }
 
-  axios.post("/api/search/relative", {Keyword: keyword.value, Limit: 5, Current: post_id.value * 1}).then(response => {
-    dataList.value = response.data.data.result
-    showEmptyRelative.value = response.data.data.result.length === 0
+      if (response.data.status === 0) {
+        collectStatus.value = response.data.data.collect
+        collectText.value = response.data.data.collect ? "取消" : "收藏"
+      }
+    })
+  }).then(() => {
+    axios.post("/api/user/history/add", {
+      Username: login_status.value.username,
+      PostId: post_id.value * 1
+    }).then(response => {
+      if (response.data.status === -1) {
+        console.log(response.data.message)
+      }
+    })
   }).catch(err => {
     if (err.response.status === 401) {
       router.push({path: "/login"})
@@ -231,7 +308,7 @@ onMounted(() => {
 
   if ("id" in route.params) {
     post_id.value = route.params.id
-    querySearch()
+    queryDetail()
   }
 })
 
@@ -244,7 +321,7 @@ onBeforeRouteUpdate(to => {
 
   if ("id" in to.params) {
     post_id.value = to.params.id
-    querySearch()
+    queryDetail()
   }
 });
 </script>
@@ -291,6 +368,12 @@ onBeforeRouteUpdate(to => {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.icon_font {
+  font-size: 20px;
+  margin-left: 8px;
+  vertical-align: middle
 }
 </style>
 

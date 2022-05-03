@@ -96,7 +96,6 @@ update(route.fullPath);
 watch(
     () => route.fullPath,
     path => {
-      // TODO 登录态
       if (path === "/login") {
         rightButtonText.value = "注册";
         jumpUrl = "/register";
