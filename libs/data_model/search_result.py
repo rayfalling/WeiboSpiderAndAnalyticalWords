@@ -12,6 +12,7 @@ class SearchResult(object):
 
         :param post_id: 微博数据库存储Id
         :param tags: 微博标签数据
+        :param time: 微博发布时间
         :param content: 微博内容
         """
 

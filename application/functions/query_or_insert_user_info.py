@@ -60,12 +60,13 @@ def query_user_info(user: UserData) -> UserData:
         return user
 
 
-def update_user_info(user: UserData, password: str) -> bool:
+def update_user_info(user: UserData, password_old: str, password_new: str) -> bool:
     """
     更新用户信息
 
     :param user: 用户信息
-    :param password: 用户密码
+    :param password_old: 用户密码旧
+    :param password_new: 用户密码新
     :return:
     """
     session: scoped_session = db.create_scoped_session(None)
@@ -73,16 +74,26 @@ def update_user_info(user: UserData, password: str) -> bool:
 
     if len(result) <= 0:
         FormatLogger.warning(
-            "Database", "Update user info in database failed. Username: {}".format(user.username)
+            "Database", "Update user info in database failed. User not exist. Username: {}".format(user.username)
+        )
+        session.close()
+        return False
+    elif result[0].password != password_old:
+        FormatLogger.warning(
+            "Database", "Update user info in database failed. Password mismatch. Username: {}".format(user.username)
         )
         session.close()
         return False
     else:
-        result[0].password = password
-        result[0].username = user.username
+        result[0].password = password_new
         result[0].nickname = user.nickname
         session.commit()
+
+        user.avatar = result[0].avatar
+        user.nickname = result[0].nickname
+
         session.close()
+        return True
 
 
 def insert_user_register(user: UserData, password: str) -> bool:

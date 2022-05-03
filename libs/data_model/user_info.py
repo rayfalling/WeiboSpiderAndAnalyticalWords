@@ -1,4 +1,5 @@
 # coding: utf-8
+from datetime import datetime
 
 
 class UserData(object):
@@ -26,4 +27,34 @@ class UserData(object):
             "nickname": self.nickname,
             "username": self.username,
             "user_type": self.user_type
+        })
+
+
+class UserActivity(object):
+    """
+    搜索结果
+    """
+
+    def __init__(self, post_id: int, tags: str, content: str, time: datetime, activity_time: datetime = None):
+        """
+
+        :param post_id: 微博数据库存储Id
+        :param tags: 微博标签数据
+        :param time: 微博发布时间
+        :param activity_time: 活动时间
+        :param content: 微博内容
+        """
+
+        self.tags = tags
+        self.time = time
+        self.post_id = post_id
+        self.content = content
+        self.activity_time = activity_time
+
+    def __repr__(self):
+        return str({
+            "tags": self.tags,
+            "time": self.time.strftime("%Y-%m-%d %H:%M:%S"),
+            "post_id": self.post_id,
+            "content": self.content
         })

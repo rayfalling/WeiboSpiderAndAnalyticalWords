@@ -2,11 +2,43 @@ from datetime import datetime
 
 from sqlalchemy.orm import scoped_session
 
-from libs import FormatLogger
+from libs import FormatLogger, UserActivity
+from utils import split_tags
 from ..core import db
-from ..database_model import UserInfo, UserHistory, UserCollect
+from ..database_model import UserInfo, UserHistory, UserCollect, SpiderOriginPostData
 
-__all__ = ("insert_user_history", "query_user_collect", "insert_user_collect", "delete_user_collect",)
+__all__ = (
+    "insert_user_history", "query_user_history_all",
+    "query_user_collect", "insert_user_collect", "delete_user_collect", "query_user_collect_all"
+)
+
+
+# noinspection DuplicatedCode
+def query_user_history_all(username: str) -> list[UserActivity]:
+    """
+    查询用户浏览数据
+
+    :param username: 用户名
+    :return:
+    """
+    session: scoped_session = db.create_scoped_session(None)
+    user_id = query_user_id(session=session, username=username)
+
+    history_list: list[UserHistory] = session.query(UserHistory).filter(UserHistory.user_id == user_id).all()
+
+    result_list: list[UserActivity] = []
+    for history in history_list:
+        post = query_post_by_id(session=session, post_id=history.post_id)
+        if post is None:
+            continue
+
+        tags = split_tags(post.tags)
+        activity = UserActivity(history.post_id, tags, post.content, post.time, history.time)
+        result_list.append(activity)
+
+    result_list.sort(key=lambda result: result.activity_time, reverse=True)
+    session.close()
+    return result_list
 
 
 # noinspection DuplicatedCode
@@ -37,6 +69,34 @@ def insert_user_history(username: str, post_id: int) -> bool:
     session.commit()
     session.close()
     return True
+
+
+# noinspection DuplicatedCode
+def query_user_collect_all(username: str) -> list[UserActivity]:
+    """
+    查询用户浏览数据
+
+    :param username: 用户名
+    :return:
+    """
+    session: scoped_session = db.create_scoped_session(None)
+    user_id = query_user_id(session=session, username=username)
+
+    history_list: list[UserCollect] = session.query(UserCollect).filter(UserCollect.user_id == user_id).all()
+
+    result_list: list[UserActivity] = []
+    for collect in history_list:
+        post = query_post_by_id(session=session, post_id=collect.post_id)
+        if post is None:
+            continue
+
+        tags = split_tags(post.tags)
+        activity = UserActivity(collect.post_id, tags, post.content, post.time, collect.id)
+        result_list.append(activity)
+
+    result_list.sort(key=lambda result: result.activity_time, reverse=True)
+    session.close()
+    return result_list
 
 
 # noinspection DuplicatedCode
@@ -137,3 +197,14 @@ def query_user_id(session: scoped_session, username: str) -> int:
         return -1
 
     return result[0].id
+
+
+def query_post_by_id(session: scoped_session, post_id: int):
+    """
+    查询用户Id
+
+    :param session:
+    :param post_id:
+    :return:
+    """
+    return session.query(SpiderOriginPostData).filter(SpiderOriginPostData.id == post_id).first()
