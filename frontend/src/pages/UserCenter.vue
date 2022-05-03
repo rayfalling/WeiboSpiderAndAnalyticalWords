@@ -50,7 +50,7 @@
             </div>
             <n-divider vertical style="--n-color: #ECECEC; height: 108px"></n-divider>
             <n-space vertical justify="center" class="right_area">
-              <n-space v-if="show_collect_empty" justify="center" align="center" class="fill_full">
+              <n-space v-if="show_history_empty" justify="center" align="center" class="fill_full">
                 <n-empty description="还没有浏览记录呢" style="--n-icon-color: #3D3D3D; --n-text-color: #3D3D3D"/>
               </n-space>
               <div v-else>
@@ -87,7 +87,7 @@
             </div>
             <n-divider vertical style="--n-color: #ECECEC; height: 108px;"></n-divider>
             <n-space vertical justify="center" class="right_area">
-              <n-space v-if="show_history_empty" justify="center" align="center" class="fill_full">
+              <n-space v-if="show_collect_empty" justify="center" align="center" class="fill_full">
                 <n-empty description="还没有收藏记录呢" style="--n-icon-color: #3D3D3D; --n-text-color: #3D3D3D"/>
               </n-space>
               <div v-else>
@@ -294,6 +294,7 @@ onMounted(() => {
       }
 
       history.value = response.data.data.result
+      show_history_empty.value = response.data.data.result.length === 0
     })
 
     axios.post("/api/user/collect/all", {
@@ -305,6 +306,7 @@ onMounted(() => {
       }
 
       collect.value = response.data.data.result
+      show_collect_empty.value = response.data.data.result.length === 0
     })
   }
 })
