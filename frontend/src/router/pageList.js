@@ -9,6 +9,8 @@ import TagTrend from "@/pages/TagTrend"
 import PostDetail from "@/pages/PostDetail"
 import SearchList from "@/pages/SearchList"
 
+import UserCenter from "@/pages/UserCenter"
+
 const pageList = {
     "/": {
         title: "首页/搜索",
@@ -34,6 +36,11 @@ const pageList = {
         title: "资讯列表",
         name: "search",
         component: SearchList
+    },
+    "user/:username(\\d+)": {
+        title: "个人中心",
+        name: "user_center",
+        component: UserCenter
     },
     "post/detail/:id(\\d+)": {
         title: "资讯详情",
