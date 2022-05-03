@@ -10,6 +10,8 @@ import PostDetail from "@/pages/PostDetail"
 import SearchList from "@/pages/SearchList"
 
 import UserCenter from "@/pages/UserCenter"
+import UserHistory from "@/pages/UserHistory"
+import UserCollect from "@/pages/UserCollect"
 
 const pageList = {
     "/": {
@@ -41,6 +43,16 @@ const pageList = {
         title: "个人中心",
         name: "user_center",
         component: UserCenter
+    },
+    "user/:username(\\d+)/history": {
+        title: "浏览记录",
+        name: "user_history",
+        component: UserHistory
+    },
+    "user/:username(\\d+)/collect": {
+        title: "收藏记录",
+        name: "user_collect",
+        component: UserCollect
     },
     "post/detail/:id(\\d+)": {
         title: "资讯详情",

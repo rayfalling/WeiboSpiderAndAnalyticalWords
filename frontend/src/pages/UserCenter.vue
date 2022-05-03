@@ -69,7 +69,7 @@
                     </n-space>
                   </n-list-item>
                   <n-list-item style="padding: 4px 8px">
-                    <n-button type="primary" size="small" style="width: 120px" dashed round @click="setModify">
+                    <n-button type="primary" size="small" style="width: 120px" dashed round @click="goHistory">
                       更多
                     </n-button>
                   </n-list-item>
@@ -106,7 +106,7 @@
                     </n-space>
                   </n-list-item>
                   <n-list-item style="padding: 4px 8px">
-                    <n-button type="primary" size="small" style="width: 120px" dashed round @click="setModify">
+                    <n-button type="primary" size="small" style="width: 120px" dashed round @click="goCollect">
                       更多
                     </n-button>
                   </n-list-item>
@@ -175,7 +175,7 @@
 
 <script setup>
 import {ref, onMounted, inject} from "vue";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {
   NLayout, NSpace, NCard, NAvatar, NA,
   NH2, NH3, NList, NListItem, NText, NEmpty,
@@ -202,6 +202,7 @@ const show_collect_empty = ref(false)
 const history = ref([])
 const show_history_empty = ref(false)
 
+const route = useRoute();
 const router = useRouter();
 const message = useMessage();
 
@@ -223,6 +224,14 @@ const setModify = () => {
   nickname_old.value = nickname.value
   nickname_new.value = nickname.value
   modify.value = true
+}
+
+const goHistory = () => {
+  router.push({path: "/user/" + login_status.value.username + "/history"})
+}
+
+const goCollect = () => {
+  router.push({path: "/user/" + login_status.value.username + "/collect"})
 }
 
 const updateUserInfo = () => {

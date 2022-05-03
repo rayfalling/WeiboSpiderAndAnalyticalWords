@@ -114,8 +114,8 @@
                   <div v-else>
                     <n-list bordered>
                       <n-list-item v-for="(item, index) in dataList" :item="item" :index="index" :key="item.id">
-                        <router-link :to="'/post/detail/' + item.id + '?keyword=' + keyword" #="{ navigate, href }"
-                                     custom>
+                        <router-link :to="'/post/detail/' + item.id + '?keyword=' + keyword + '&from=' + source"
+                                     #="{ navigate, href }" custom>
                           <n-a tag="div" :underline="false" :href="href" @click="navigate">
                             <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
                               <div>
@@ -180,6 +180,7 @@ const message = useMessage();
 const axios = inject("axios")
 const login_status = inject("login")
 
+const source = ref("")
 const post_id = ref(-1)
 const dataList = ref([])
 const keyword = ref(null)
@@ -201,8 +202,15 @@ const goBack = () => {
     // jump to search page
     router.push({path: "/"})
   }
-  // jump to search page
-  router.push({path: "/search", query: {keyword: keyword.value}})
+
+  if (source.value === "collect") {
+    router.push({path: "/user/" + login_status.value.username + "/collect"})
+  } else if (source.value === "history") {
+    router.push({path: "/user/" + login_status.value.username + "/history"})
+  } else {
+    // jump to search page
+    router.push({path: "/search", query: {keyword: keyword.value}})
+  }
 }
 
 const switchCollectStatus = () => {
@@ -262,8 +270,12 @@ function queryDetail() {
       Keyword: keyword.value, Limit: 5,
       Current: post_id.value * 1
     }).then(response => {
-      dataList.value = response.data.data.result
-      showEmptyRelative.value = response.data.data.result.length === 0
+      if (response.data.status === -1) {
+        console.error(response.data.message)
+      } else {
+        dataList.value = response.data.data.result
+        showEmptyRelative.value = response.data.data.result.length === 0
+      }
     }).catch(err => {
       if (err.response.status === 401) {
         router.push({path: "/login"})
@@ -306,6 +318,10 @@ onMounted(() => {
     console.error("搜索关键词为空")
   }
 
+  if ("from" in route.query) {
+    source.value = route.query.from
+  }
+
   if ("id" in route.params) {
     post_id.value = route.params.id
     queryDetail()
@@ -317,6 +333,10 @@ onBeforeRouteUpdate(to => {
     keyword.value = to.query.keyword
   } else {
     console.error("搜索关键词为空")
+  }
+
+  if ("from" in to.query) {
+    source.value = to.query.from
   }
 
   if ("id" in to.params) {
