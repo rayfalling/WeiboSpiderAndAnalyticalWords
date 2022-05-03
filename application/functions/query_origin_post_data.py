@@ -1,6 +1,7 @@
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import scoped_session
 
+from utils import split_tags
 from ..core import db
 from ..database_model import SpiderOriginPostData, SpiderOriginCommentData
 
@@ -29,12 +30,8 @@ def query_search_by_keyword(keyword: str) -> list[SearchResult]:
 
     search_result_list = []
     for item in result:
-        tags = item.tags.split("#")
-        if tags[0] == "":
-            tags_str = ""
-        else:
-            tags_str = "".join(["#" + item + "# " for item in tags])
-        search_result = SearchResult(item.id, tags_str, item.content, item.time)
+        tags = split_tags(item.tags)
+        search_result = SearchResult(item.id, tags, item.content, item.time)
         search_result_list.append(search_result)
 
     search_result_list.sort(key=lambda rs: rs.time, reverse=True)
@@ -58,11 +55,7 @@ def query_post_detail_by_id(post_id: int) -> PostDetail:
         return PostDetail(-1)
 
     item = result[0]
-    tags = item.tags.split("#")
-    if tags[0] == "":
-        tags_str = ""
-    else:
-        tags_str = "".join(["#" + item + "# " for item in tags])
+    tags = split_tags(item.tags)
 
     count = (item.attitudes_count, item.comments_count, item.reposts_count)
     comment_result = session.query(SpiderOriginCommentData).filter(SpiderOriginCommentData.post_id == post_id).all()
@@ -73,4 +66,4 @@ def query_post_detail_by_id(post_id: int) -> PostDetail:
 
     session.close()
 
-    return PostDetail(item.id, item.username, tags_str, item.content, item.time, count, comments)
+    return PostDetail(item.id, item.username, tags, item.content, item.time, count, comments)
