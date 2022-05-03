@@ -4,8 +4,7 @@
     <n-space justify="space-between" align="center" class="full_page">
       <div></div>
       <n-card hoverable header-style="text-align: center; font-size: 1.5rem; padding-bottom: 0;"
-              content-style="padding: 8px;"
-              style="background-color: rgba(255, 255, 255, 0.2);">
+              content-style="padding: 8px;" style="background-color: rgba(255, 255, 255, 0.2);">
         <template #header>
           <n-avatar round :size="96" :src="avatar" object-fit="cover" class="item_content"/>
         </template>

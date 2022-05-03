@@ -5,12 +5,24 @@
       <div class="content_row">
         <n-space justify="center" align="center">
           <div class="card_block detail">
-            <n-card hoverable :title="post_detail.tags" content-style="padding: 0 8px 8px 8px;" style="height: 100%"
-                    header-style="text-align: center; font-size: 1.5rem; padding: 16px 16px 8px 16px" size="medium">
-              <template #header-extra>
-                <n-button @click="goBack">
-                  返回列表
-                </n-button>
+            <n-card hoverable content-style="padding: 0 8px 8px 8px;" style="height: 100%"
+                    header-style="padding: 16px 16px 8px 16px" size="medium">
+              <template #header>
+                <n-space justify="space-between" align="center" style="height: 100%">
+                  <div style="width: 120px; text-align: left;">
+                    <n-button @click="goBack">
+                      返回列表
+                    </n-button>
+                  </div>
+                  <div style="text-align: center; font-size: 1.5rem;">
+                    {{ post_detail.tags }}
+                  </div>
+                  <div  style="width: 120px; text-align: right;">
+                    <n-button v-if="isAdmin()" type="error" @click="removePost(post_id)">
+                      删除
+                    </n-button>
+                  </div>
+                </n-space>
               </template>
               <div class="card_content">
                 <n-space vertical justify="space-between" style="height: 100%">
@@ -28,9 +40,9 @@
                         <n-icon size="24" style="vertical-align: middle">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                             <path
-                                d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54 44.14-95.08 96.81c-1.1
-                          109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34 184.09-143.09
-                          183-252.42c-.54-52.67-42.32-96.81-95.08-96.81z"
+                                d="M352.92 80C288 80 256 144 256 144s-32-64-96.92-64c-52.76 0-94.54
+                                44.14-95.08 96.81c-1.1 109.33 86.73 187.08 183 252.42a16 16 0 0 0 18 0c96.26-65.34
+                                184.09-143.09 183-252.42c-.54-52.67-42.32-96.81-95.08-96.81z"
                                 fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                 stroke-width="32">
                             </path>
@@ -150,8 +162,11 @@
                         <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
                           <div>
                             {{ index }}
-                            <span style="padding-left: 16px"> {{ item }}  </span>
+                            <span style="padding-left: 16px"> {{ item.content }}  </span>
                           </div>
+                          <n-button v-if="isAdmin()" type="error" @click="removeComment(item.id)">
+                            删除
+                          </n-button>
                         </n-space>
                       </n-list-item>
                     </n-list>
@@ -178,6 +193,7 @@ const router = useRouter();
 const message = useMessage();
 
 const axios = inject("axios")
+const isAdmin = inject("isAdmin")
 const login_status = inject("login")
 
 const source = ref("")
@@ -195,6 +211,41 @@ function spilt_content(content) {
     return content.substr(0, 10) + "..."
   }
   return content
+}
+
+const removePost = (post_id) => {
+  axios.post("/api/admin/post/delete", {
+    PostId: post_id
+  }).then(response => {
+    if (response.data.status === -1) {
+      message.error("删除失败")
+    } else {
+      message.info("删除成功")
+      goBack()
+    }
+  }).catch(err => {
+    if (err.response.status === 401) {
+      router.push({path: "/login"})
+    }
+  })
+}
+
+const removeComment = (comment_id) => {
+  axios.post("/api/admin/comment/delete", {
+    PostId: post_id.value,
+    CommentId: comment_id
+  }).then(response => {
+    if (response.data.status === -1) {
+      message.error("删除失败")
+    } else {
+      message.info("删除成功")
+      queryDetail()
+    }
+  }).catch(err => {
+    if (err.response.status === 401) {
+      router.push({path: "/login"})
+    }
+  })
 }
 
 const goBack = () => {
