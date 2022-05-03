@@ -1,4 +1,5 @@
 # Must import first
+from .clear_all import clear_all_data
 from .query_search_key import query_or_insert_search_key_id, query_search_key_id
 
 # Import next
@@ -15,6 +16,7 @@ from .query_or_insert_user_activity import query_user_history_all, query_user_co
 from .query_or_insert_user_activity import query_user_collect, insert_user_collect, delete_user_collect
 
 __all__ = (
+    "clear_all_data",
     "insert_all_post_data", "insert_all_word_split_data", "query_or_insert_search_key_id", "query_search_key_id",
     "query_all_post_and_comment_by_keyword", "query_search_by_keyword", "query_post_detail_by_id",
     "query_user_login", "query_user_info", "insert_user_register", "update_user_info", "query_search_key_trend",

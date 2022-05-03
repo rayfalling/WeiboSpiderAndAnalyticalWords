@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 
 from libs import fetch_pages, FormatLogger, word_split
 from libs.data_model import PostData, PostDataContent, WordFrequency
@@ -8,7 +8,9 @@ from libs.data_model import PostData, PostDataContent, WordFrequency
 from .common import process_after_request, process_login_status
 
 from ..thread_pool import submit_function_async
-from ..functions import insert_all_post_data, insert_all_word_split_data, query_all_post_and_comment_by_keyword
+from ..functions import clear_all_data, insert_all_post_data
+from ..functions import insert_all_word_split_data, query_all_post_and_comment_by_keyword
+
 
 admin_router = Blueprint("admin", __name__)
 admin_router.before_request(process_login_status)
@@ -34,6 +36,13 @@ def request_spider_update():
         FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
         response_data["message"] = "无效请求"
         return jsonify(response_data)
+
+    if session.get("user_type") is None or session.get("user_type") == 1:
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "用户不是管理员"
+        return jsonify(response_data)
+
+    clear_all_data()
 
     request_data = request.get_data()
     request_json = json.loads(request_data)
