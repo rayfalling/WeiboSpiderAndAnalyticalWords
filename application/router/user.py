@@ -100,7 +100,7 @@ def request_register():
         return jsonify(response_data)
 
     avatar_index = int(random.random() * 100) % 5 + 1
-    avatar_url = f"static/avatar{avatar_index}.png"
+    avatar_url = f"/static/avatar{avatar_index}.png"
 
     user: UserData = UserData(request_username, request_nickname, avatar_url, 1)
     result = insert_user_register(user, request_password)
