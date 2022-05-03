@@ -5,7 +5,9 @@ from libs import FormatLogger, UserData
 from ..core import db
 from ..database_model import UserInfo
 
-__all__ = ("query_user_login", "query_user_info", "update_user_info", "insert_user_register")
+__all__ = (
+    "query_user_login", "query_user_info", "update_user_info", "insert_user_register", "query_user_info_by_keyword"
+)
 
 
 def query_user_login(user: UserData, password: str) -> UserData:
@@ -58,6 +60,27 @@ def query_user_info(user: UserData) -> UserData:
         user.username = result[0].username
         user.nickname = result[0].nickname
         return user
+
+
+def query_user_info_by_keyword(keyword: str) -> str:
+    """
+    查询用户信息
+
+    :param keyword: 查询信息
+    :return:
+    """
+    session: scoped_session = db.create_scoped_session(None)
+    result = session.query(UserInfo).filter(
+        or_(UserInfo.username == keyword, UserInfo.nickname == keyword)
+    ).first()
+
+    if result is None:
+        session.close()
+        return "-1"
+    else:
+        username = result.username
+        session.close()
+        return username
 
 
 def update_user_info(user: UserData, password_old: str, password_new: str) -> bool:

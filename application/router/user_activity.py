@@ -41,7 +41,8 @@ def request_user_info():
     request_json = json.loads(request_data)
     request_username = request_json.get("Username", "")
 
-    if request_username == "" or session["username"] != request_username:
+    is_admin = session.get("user_type") is not None and session.get("user_type") == 0
+    if request_username == "" or (session["username"] != request_username and not is_admin):
         FormatLogger.error("UserRouter", "Error request data! Request url is {}".format(request.url))
         response_data["message"] = "用户登录信息无效"
         return jsonify(response_data)
@@ -94,7 +95,8 @@ def request_user_update():
     request_password_old = request_json.get("PasswordOld", "")
     request_password_new = request_json.get("PasswordNew", "")
 
-    if request_username == "" or session["username"] != request_username:
+    is_admin = session.get("user_type") is not None and session.get("user_type") == 0
+    if request_username == "" or (session["username"] != request_username and not is_admin):
         FormatLogger.error("UserRouter", "Error request data! Request url is {}".format(request.url))
         response_data["message"] = "用户登录信息无效"
         return jsonify(response_data)
@@ -154,7 +156,8 @@ def request_user_history_all():
         response_data["message"] = "请求参数错误"
         return jsonify(response_data)
 
-    if session["username"] != request_username:
+    is_admin = session.get("user_type") is not None and session.get("user_type") == 0
+    if request_username == "" or (session["username"] != request_username and not is_admin):
         FormatLogger.error("UserRouter", "Error request data! Request url is {}".format(request.url))
         response_data["message"] = "用户登录信息无效"
         return jsonify(response_data)
@@ -262,7 +265,8 @@ def request_user_history_remove():
         response_data["message"] = "请求参数错误"
         return jsonify(response_data)
 
-    if session["username"] != request_username:
+    is_admin = session.get("user_type") is not None and session.get("user_type") == 0
+    if request_username == "" or (session["username"] != request_username and not is_admin):
         FormatLogger.error("UserRouter", "Error request data! Request url is {}".format(request.url))
         response_data["message"] = "用户登录信息无效"
         return jsonify(response_data)
@@ -315,7 +319,8 @@ def request_user_collect_all():
         response_data["message"] = "请求参数错误"
         return jsonify(response_data)
 
-    if session["username"] != request_username:
+    is_admin = session.get("user_type") is not None and session.get("user_type") == 0
+    if request_username == "" or (session["username"] != request_username and not is_admin):
         FormatLogger.error("UserRouter", "Error request data! Request url is {}".format(request.url))
         response_data["message"] = "用户登录信息无效"
         return jsonify(response_data)
@@ -479,7 +484,8 @@ def request_user_collect_remove():
         response_data["message"] = "请求参数错误"
         return jsonify(response_data)
 
-    if session["username"] != request_username:
+    is_admin = session.get("user_type") is not None and session.get("user_type") == 0
+    if request_username == "" or (session["username"] != request_username and not is_admin):
         FormatLogger.error("UserRouter", "Error request data! Request url is {}".format(request.url))
         response_data["message"] = "用户登录信息无效"
         return jsonify(response_data)

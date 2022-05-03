@@ -8,7 +8,7 @@ from libs.data_model import PostData, PostDataContent, WordFrequency
 from .common import process_after_request, process_login_status
 
 from ..thread_pool import submit_function_async
-from ..functions import clear_all_data, insert_all_post_data, delete_post_with_id
+from ..functions import clear_all_data, insert_all_post_data, delete_post_with_id, query_user_info_by_keyword
 from ..functions import insert_all_word_split_data, query_all_post_and_comment_by_keyword, delete_comment_with_id
 
 admin_router = Blueprint("admin", __name__)
@@ -163,6 +163,54 @@ def request_comment_delete():
     else:
         response_data["status"] = 0
         response_data["message"] = "删除成功"
+
+    return jsonify(response_data)
+
+
+# noinspection DuplicatedCode
+@admin_router.route("/api/admin/user/query", methods=["POST"])
+def request_query_user():
+    """
+    路由--查询用户信息
+
+    :return:
+    """
+    response_data = {
+        "status": -1,
+        "message": "请求失败",
+        "data": {}
+    }
+
+    if request.method != "POST":
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "无效请求"
+        return jsonify(response_data)
+
+    if session.get("user_type") is None or session.get("user_type") == 1:
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "用户不是管理员"
+        return jsonify(response_data)
+
+    request_data = request.get_data()
+    request_json = json.loads(request_data)
+    request_keyword = request_json.get("Keyword", "")
+
+    if request_keyword == "":
+        FormatLogger.error("AdminRouter", "Empty request data! Request url is {}".format(request.url))
+        response_data["message"] = "参数错误"
+        return jsonify(response_data)
+
+    result = query_user_info_by_keyword(request_keyword)
+
+    if result == "-1":
+        response_data["status"] = -1
+        response_data["message"] = "用户不存在"
+    else:
+        response_data["status"] = 0
+        response_data["message"] = "查询成功"
+        response_data["data"] = {
+            "username": result
+        }
 
     return jsonify(response_data)
 
