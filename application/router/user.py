@@ -3,11 +3,9 @@ import random
 
 from flask import Blueprint, request, jsonify, session
 
-from .common import process_after_request
-
-from ..functions import query_user_login, insert_user_register
-
 from libs import FormatLogger, UserData
+from .common import process_after_request
+from ..functions import query_user_login, insert_user_register
 
 user_router = Blueprint("user", __name__)
 user_router.after_request(process_after_request)
