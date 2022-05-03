@@ -40,12 +40,12 @@ import {NLayout, NEmpty, NSpace, NList, NListItem, NText, NH1, NA} from "naive-u
 
 import BackgroundImage from "@/components/BackgroundImage";
 
-const router = useRouter();
-const axios = inject("axios")
-
 const dataList = ref([])
 const showEmpty = ref(false)
 
+const router = useRouter();
+
+const axios = inject("axios")
 
 function queryTrend() {
   axios.post("/api/post/trend").then(response => {

@@ -230,12 +230,11 @@ const updateUserInfo = () => {
   let md5_password_new = md5(password_new.value)
 
   axios.post("/api/user/info/update", {
-        Username: login_status.value.username,
-        Nickname: nickname_new.value,
-        PasswordOld: md5_password_old,
-        PasswordNew: md5_password_new,
-      }
-  ).then(response => {
+    Username: login_status.value.username,
+    Nickname: nickname_new.value,
+    PasswordOld: md5_password_old,
+    PasswordNew: md5_password_new,
+  }).then(response => {
     if (response.data.status === -1) {
       message.error(response.data.message)
       return
@@ -257,11 +256,13 @@ const updateUserInfo = () => {
 }
 
 onMounted(() => {
-  setTimeout(() => {
+  let username_local = ""
+  if ("username" in route.params) {
+    username_local = route.params.username
+
     axios.post("/api/user/info", {
-          Username: login_status.value.username,
-        }
-    ).then(response => {
+      Username: username_local,
+    }).then(response => {
       if (response.data.status === -1) {
         message.error(response.data.message)
       }
@@ -269,37 +270,35 @@ onMounted(() => {
       avatar.value = response.data.data.avatar
       username.value = response.data.data.username
       nickname.value = response.data.data.nickname
-    }).then(() => {
-      axios.post("/api/user/history/all", {
-            Username: login_status.value.username,
-            Limit: 5
-          }
-      ).then(response => {
-        if (response.data.status === -1) {
-          message.error(response.data.message)
-        }
-
-        history.value = response.data.data.result
-      })
-
-      axios.post("/api/user/collect/all", {
-            Username: login_status.value.username,
-            Limit: 5
-          }
-      ).then(response => {
-        if (response.data.status === -1) {
-          message.error(response.data.message)
-        }
-
-        collect.value = response.data.data.result
-      })
     }).catch(err => {
       if (err.response.status === 401) {
         router.push({path: "/login"})
       }
       message.error("网络错误");
     })
-  }, 500)
+
+    axios.post("/api/user/history/all", {
+      Username: username_local,
+      Limit: 5
+    }).then(response => {
+      if (response.data.status === -1) {
+        message.error(response.data.message)
+      }
+
+      history.value = response.data.data.result
+    })
+
+    axios.post("/api/user/collect/all", {
+      Username: username_local,
+      Limit: 5
+    }).then(response => {
+      if (response.data.status === -1) {
+        message.error(response.data.message)
+      }
+
+      collect.value = response.data.data.result
+    })
+  }
 })
 </script>
 

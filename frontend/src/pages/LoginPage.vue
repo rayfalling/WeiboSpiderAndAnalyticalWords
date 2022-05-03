@@ -62,10 +62,9 @@ const onLogin = () => {
   let md5_password = md5(model.value.password)
 
   axios.post("/api/login", {
-        Username: model.value.username,
-        Password: md5_password
-      }
-  ).then(response => {
+    Username: model.value.username,
+    Password: md5_password
+  }).then(response => {
     if (response.data.status === 0) {
       login_status.value.login = true
 

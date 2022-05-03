@@ -139,11 +139,10 @@ const onRegister = () => {
       let md5_password = md5(model.value.password)
 
       axios.post("/api/register", {
-            Username: model.value.username,
-            Nickname: model.value.nickname,
-            Password: md5_password
-          }
-      ).then(response => {
+        Username: model.value.username,
+        Nickname: model.value.nickname,
+        Password: md5_password
+      }).then(response => {
         if (response.data.status === 0) {
           message.info(response.data.message)
           onLoginClick();
