@@ -10,7 +10,8 @@ from .query_search_keyword_trend import query_search_key_trend
 from .query_origin_post_data import query_search_by_keyword, query_post_detail_by_id
 from .query_or_insert_user_info import query_user_login, query_user_info, insert_user_register, update_user_info
 
-from .query_or_insert_user_activity import insert_user_history, query_user_history_all, query_user_collect_all
+from .query_or_insert_user_activity import insert_user_history, delete_user_history
+from .query_or_insert_user_activity import query_user_history_all, query_user_collect_all
 from .query_or_insert_user_activity import query_user_collect, insert_user_collect, delete_user_collect
 
 __all__ = (
@@ -18,5 +19,5 @@ __all__ = (
     "query_all_post_and_comment_by_keyword", "query_search_by_keyword", "query_post_detail_by_id",
     "query_user_login", "query_user_info", "insert_user_register", "update_user_info", "query_search_key_trend",
     "insert_user_history", "query_user_collect", "insert_user_collect", "delete_user_collect",
-    "query_user_history_all", "query_user_collect_all"
+    "query_user_history_all", "query_user_collect_all", "delete_user_history"
 )

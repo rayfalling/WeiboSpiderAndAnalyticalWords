@@ -8,7 +8,7 @@ from ..core import db
 from ..database_model import UserInfo, UserHistory, UserCollect, SpiderOriginPostData
 
 __all__ = (
-    "insert_user_history", "query_user_history_all",
+    "insert_user_history", "query_user_history_all", "delete_user_history",
     "query_user_collect", "insert_user_collect", "delete_user_collect", "query_user_collect_all"
 )
 
@@ -72,9 +72,37 @@ def insert_user_history(username: str, post_id: int) -> bool:
 
 
 # noinspection DuplicatedCode
+def delete_user_history(username: str, post_id: int) -> tuple[bool, bool]:
+    """
+    删除用户浏览记录
+
+    :param username: 用户名
+    :param post_id: 浏览的贴子Id
+    :return:
+    """
+    session: scoped_session = db.create_scoped_session(None)
+    user_id = query_user_id(session=session, username=username)
+
+    if user_id == -1:
+        return False, False
+
+    collect_list = session.query(UserHistory).filter(
+        UserHistory.user_id == user_id, UserHistory.post_id == post_id
+    ).all()
+
+    if len(collect_list) == 0:
+        return True, False
+
+    session.delete(collect_list[0])
+    session.commit()
+    session.close()
+    return True, True
+
+
+# noinspection DuplicatedCode
 def query_user_collect_all(username: str) -> list[UserActivity]:
     """
-    查询用户浏览数据
+    查询用户收藏数据
 
     :param username: 用户名
     :return:
@@ -102,7 +130,7 @@ def query_user_collect_all(username: str) -> list[UserActivity]:
 # noinspection DuplicatedCode
 def query_user_collect(username: str, post_id: int) -> tuple[bool, bool]:
     """
-    插入用户浏览数据
+    查询用户是否收藏
 
     :param username: 用户名
     :param post_id: 浏览的贴子Id
@@ -155,7 +183,7 @@ def insert_user_collect(username: str, post_id: int) -> tuple[bool, bool]:
 # noinspection DuplicatedCode
 def delete_user_collect(username: str, post_id: int) -> tuple[bool, bool]:
     """
-    插入用户浏览数据
+    删除用户收藏数据
 
     :param username: 用户名
     :param post_id: 浏览的贴子Id
@@ -201,7 +229,7 @@ def query_user_id(session: scoped_session, username: str) -> int:
 
 def query_post_by_id(session: scoped_session, post_id: int):
     """
-    查询用户Id
+    查询微博数据
 
     :param session:
     :param post_id:

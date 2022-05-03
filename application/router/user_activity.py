@@ -6,7 +6,7 @@ from libs import FormatLogger, UserData
 from .common import process_after_request, process_login_status
 from ..functions import query_user_info, insert_user_history, update_user_info
 from ..functions import query_user_collect, insert_user_collect, delete_user_collect
-from ..functions import query_user_history_all, query_user_collect_all
+from ..functions import query_user_history_all, query_user_collect_all, delete_user_history
 
 user_activity_router = Blueprint("user_activity", __name__)
 user_activity_router.before_request(process_login_status)
@@ -231,6 +231,59 @@ def request_user_history_add():
 
 
 # noinspection DuplicatedCode
+@user_activity_router.route("/api/user/history/remove", methods=["POST"])
+def request_user_history_remove():
+    """
+    路由--取消用户历史
+
+    :return:
+    """
+    if session.get("login_status") is None or not session.get("login_status"):
+        return abort(401)
+
+    response_data = {
+        "status": -1,
+        "message": "请求失败",
+        "data": {}
+    }
+
+    if request.method != "POST":
+        FormatLogger.error("UserRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "无效请求"
+        return jsonify(response_data)
+
+    request_data = request.get_data()
+    request_json = json.loads(request_data)
+    request_post_id = request_json.get("PostId", -1)
+    request_username = request_json.get("Username", "")
+
+    if request_username == "" or request_post_id == -1:
+        FormatLogger.error("UserRouter", "Error request data! Request url is {}".format(request.url))
+        response_data["message"] = "请求参数错误"
+        return jsonify(response_data)
+
+    if session["username"] != request_username:
+        FormatLogger.error("UserRouter", "Error request data! Request url is {}".format(request.url))
+        response_data["message"] = "用户登录信息无效"
+        return jsonify(response_data)
+
+    result, status = delete_user_history(request_username, request_post_id)
+
+    if not result:
+        response_data["status"] = -1
+        response_data["message"] = "内部错误"
+    else:
+        if not status:
+            response_data["status"] = -1
+            response_data["message"] = "无历史记录"
+        else:
+            response_data["status"] = 0
+            response_data["message"] = "删除历史成功"
+
+    return jsonify(response_data)
+
+
+# noinspection DuplicatedCode
 @user_activity_router.route("/api/user/collect/all", methods=["POST"])
 def request_user_collect_all():
     """
@@ -442,6 +495,6 @@ def request_user_collect_remove():
             response_data["message"] = "用户未收藏"
         else:
             response_data["status"] = 0
-            response_data["message"] = "收藏成功"
+            response_data["message"] = "删除收藏成功"
 
     return jsonify(response_data)
