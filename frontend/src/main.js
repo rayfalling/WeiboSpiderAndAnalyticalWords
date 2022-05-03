@@ -32,7 +32,6 @@ function dateFormat(fmt, date) {
     return fmt;
 }
 
-
 const app = createApp(App);
 app.use(router);
 app.use(VueAxios, axios);

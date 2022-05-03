@@ -35,9 +35,14 @@ const login_status = ref({
   avatar: "",
   username: "",
   nickname: "",
-  user_type: 0,
+  user_type: 1,
 })
 
+const isAdmin = () => {
+  return login_status.value.user_type === 0
+}
+
+provide("isAdmin", isAdmin)
 provide("login", login_status)
 </script>
 
