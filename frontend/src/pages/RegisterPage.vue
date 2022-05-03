@@ -125,6 +125,8 @@ const themeOverrides = {
 
 const router = useRouter();
 const message = useMessage();
+
+const md5 = inject("md5")
 const axios = inject("axios")
 
 const onLoginClick = () => {
@@ -134,10 +136,12 @@ const onLoginClick = () => {
 const onRegister = () => {
   formRef.value?.validate((errors) => {
     if (!errors) {
+      let md5_password = md5(model.value.password)
+
       axios.post("/api/register", {
             Username: model.value.username,
             Nickname: model.value.nickname,
-            Password: model.value.password
+            Password: md5_password
           }
       ).then(response => {
         if (response.data.status === 0) {
