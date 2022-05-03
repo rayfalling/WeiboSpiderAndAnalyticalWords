@@ -3,124 +3,128 @@
     <BackgroundImage/>
     <n-space justify="space-between" align="center" class="full_page">
       <div></div>
-      <n-card hoverable header-style="text-align: center; font-size: 1.5rem; padding-bottom: 0;"
-              content-style="padding: 8px;" style="background-color: rgba(255, 255, 255, 0.2);">
-        <template #header>
-          <n-avatar round :size="96" :src="avatar" object-fit="cover" class="item_content"/>
-        </template>
-        <n-divider style="--n-color: #ECECEC; margin: 12px 0;"></n-divider>
-        <div class="user_content">
-          <n-space justify="space-between" align="center">
-            <div class="left_area">
-              <n-h2 prefix="bar" align-text style="margin-bottom: 0">
-                个人信息
-              </n-h2>
-            </div>
-            <n-divider vertical style="--n-color: #ECECEC; height: 108px"></n-divider>
-            <n-space vertical justify="center" class="right_area">
-              <n-space align="center">
-                <n-h3 class="item_name">
-                  帐号
-                </n-h3>
-                <n-text class="item_content">
-                  {{ username }}
-                </n-text>
-              </n-space>
-              <n-space align="center">
-                <n-h3 class="item_name">
-                  昵称
-                </n-h3>
-                <n-text class="item_content">
-                  {{ nickname }}
-                </n-text>
-              </n-space>
-              <n-button type="primary" size="small" style="width: 120px" dashed round @click="setModify">
-                修改信息
-              </n-button>
-            </n-space>
-          </n-space>
-        </div>
-        <n-divider style="--n-color: #ECECEC; margin: 12px 0;"></n-divider>
-        <div class="user_content">
-          <n-space justify="space-between" align="center">
-            <div class="left_area">
-              <n-h2 prefix="bar" align-text style="margin-bottom: 0">
-                浏览记录
-              </n-h2>
-            </div>
-            <n-divider vertical style="--n-color: #ECECEC; height: 108px"></n-divider>
-            <n-space vertical justify="center" class="right_area">
-              <n-space v-if="show_history_empty" justify="center" align="center" class="fill_full">
-                <n-empty description="还没有浏览记录呢" style="--n-icon-color: #3D3D3D; --n-text-color: #3D3D3D"/>
-              </n-space>
-              <div v-else>
-                <n-list bordered style="margin: 0">
-                  <n-list-item v-for="(item, index) in history" :item="item" :index="index" :key="item.id"
-                               style="padding: 4px 8px">
-                    <n-space justify="space-between" align="center" :wrap="false">
-                      <div>
-                        {{ index + 1 }}
-                        <span style="padding-left: 16px">{{ item.content.substr(0, 6) }}...</span>
-                      </div>
-                      <div>
-                        {{ str_time(item.activity_time) }}
-                      </div>
-                    </n-space>
-                  </n-list-item>
-                  <n-list-item style="padding: 4px 8px">
-                    <n-button type="primary" size="small" style="width: 120px" dashed round @click="goHistory">
-                      更多
-                    </n-button>
-                  </n-list-item>
-                </n-list>
+      <n-space vertical justify="space-between" align="center" class="full_page">
+        <SearchInput v-if="isAdmin()" class="search_content" width="560px" @on-search-clicked="onSearch"
+                     :content="userKeyword" placeholder="请输入用户名或昵称"/>
+        <n-card hoverable header-style="text-align: center; font-size: 1.5rem; padding-bottom: 0;"
+                content-style="padding: 8px;" style="background-color: rgba(255, 255, 255, 0.2);">
+          <template #header>
+            <n-avatar round :size="96" :src="avatar" object-fit="cover" class="item_content"/>
+          </template>
+          <n-divider style="--n-color: #ECECEC; margin: 12px 0;"></n-divider>
+          <div class="user_content">
+            <n-space justify="space-between" align="center">
+              <div class="left_area">
+                <n-h2 prefix="bar" align-text style="margin-bottom: 0">
+                  个人信息
+                </n-h2>
               </div>
-            </n-space>
-          </n-space>
-        </div>
-        <n-divider style="--n-color: #ECECEC; margin: 12px 0;"></n-divider>
-        <div class="user_content">
-          <n-space justify="space-between" align="center">
-            <div class="left_area">
-              <n-h2 prefix="bar" align-text style="margin-bottom: 0">
-                我的收藏
-              </n-h2>
-            </div>
-            <n-divider vertical style="--n-color: #ECECEC; height: 108px;"></n-divider>
-            <n-space vertical justify="center" class="right_area">
-              <n-space v-if="show_collect_empty" justify="center" align="center" class="fill_full">
-                <n-empty description="还没有收藏记录呢" style="--n-icon-color: #3D3D3D; --n-text-color: #3D3D3D"/>
+              <n-divider vertical style="--n-color: #ECECEC; height: 108px"></n-divider>
+              <n-space vertical justify="center" class="right_area">
+                <n-space align="center">
+                  <n-h3 class="item_name">
+                    帐号
+                  </n-h3>
+                  <n-text class="item_content">
+                    {{ username }}
+                  </n-text>
+                </n-space>
+                <n-space align="center">
+                  <n-h3 class="item_name">
+                    昵称
+                  </n-h3>
+                  <n-text class="item_content">
+                    {{ nickname }}
+                  </n-text>
+                </n-space>
+                <n-button type="primary" size="small" style="width: 120px" dashed round @click="setModify">
+                  修改信息
+                </n-button>
               </n-space>
-              <div v-else>
-                <n-list bordered style="margin: 0">
-                  <n-list-item v-for="(item, index) in collect" :item="item" :index="index" :key="item.id"
-                               style="padding: 4px 8px">
-                    <n-space justify="space-between" align="center" :wrap="false">
-                      <div>
-                        {{ index + 1 }}
-                        <span style="padding-left: 16px">{{ item.content.substr(0, 6) }}...</span>
-                      </div>
-                      <div>
-                        {{ str_time(item.time) }}
-                      </div>
-                    </n-space>
-                  </n-list-item>
-                  <n-list-item style="padding: 4px 8px">
-                    <n-button type="primary" size="small" style="width: 120px" dashed round @click="goCollect">
-                      更多
-                    </n-button>
-                  </n-list-item>
-                </n-list>
-              </div>
             </n-space>
-          </n-space>
-        </div>
-        <n-divider style="--n-color: #ECECEC; margin: 12px 0;"></n-divider>
-        <div class="user_content">
-          <n-space justify="center" align="center">
-            <n-a tag="div" :underline="false" href="mailto://209651109@qq.com">联系我们</n-a>
-          </n-space>
-        </div>
-      </n-card>
+          </div>
+          <n-divider style="--n-color: #ECECEC; margin: 12px 0;"></n-divider>
+          <div class="user_content">
+            <n-space justify="space-between" align="center">
+              <div class="left_area">
+                <n-h2 prefix="bar" align-text style="margin-bottom: 0">
+                  浏览记录
+                </n-h2>
+              </div>
+              <n-divider vertical style="--n-color: #ECECEC; height: 108px"></n-divider>
+              <n-space vertical justify="center" class="right_area">
+                <n-space v-if="show_history_empty" justify="center" align="center" class="fill_full">
+                  <n-empty description="还没有浏览记录呢" style="--n-icon-color: #3D3D3D; --n-text-color: #3D3D3D"/>
+                </n-space>
+                <div v-else>
+                  <n-list bordered style="margin: 0">
+                    <n-list-item v-for="(item, index) in history" :item="item" :index="index" :key="item.id"
+                                 style="padding: 4px 8px">
+                      <n-space justify="space-between" align="center" :wrap="false">
+                        <div>
+                          {{ index + 1 }}
+                          <span style="padding-left: 16px">{{ item.content.substr(0, 6) }}...</span>
+                        </div>
+                        <div>
+                          {{ str_time(item.activity_time) }}
+                        </div>
+                      </n-space>
+                    </n-list-item>
+                    <n-list-item style="padding: 4px 8px">
+                      <n-button type="primary" size="small" style="width: 120px" dashed round @click="goHistory">
+                        更多
+                      </n-button>
+                    </n-list-item>
+                  </n-list>
+                </div>
+              </n-space>
+            </n-space>
+          </div>
+          <n-divider style="--n-color: #ECECEC; margin: 12px 0;"></n-divider>
+          <div class="user_content">
+            <n-space justify="space-between" align="center">
+              <div class="left_area">
+                <n-h2 prefix="bar" align-text style="margin-bottom: 0">
+                  我的收藏
+                </n-h2>
+              </div>
+              <n-divider vertical style="--n-color: #ECECEC; height: 108px;"></n-divider>
+              <n-space vertical justify="center" class="right_area">
+                <n-space v-if="show_collect_empty" justify="center" align="center" class="fill_full">
+                  <n-empty description="还没有收藏记录呢" style="--n-icon-color: #3D3D3D; --n-text-color: #3D3D3D"/>
+                </n-space>
+                <div v-else>
+                  <n-list bordered style="margin: 0">
+                    <n-list-item v-for="(item, index) in collect" :item="item" :index="index" :key="item.id"
+                                 style="padding: 4px 8px">
+                      <n-space justify="space-between" align="center" :wrap="false">
+                        <div>
+                          {{ index + 1 }}
+                          <span style="padding-left: 16px">{{ item.content.substr(0, 6) }}...</span>
+                        </div>
+                        <div>
+                          {{ str_time(item.time) }}
+                        </div>
+                      </n-space>
+                    </n-list-item>
+                    <n-list-item style="padding: 4px 8px">
+                      <n-button type="primary" size="small" style="width: 120px" dashed round @click="goCollect">
+                        更多
+                      </n-button>
+                    </n-list-item>
+                  </n-list>
+                </div>
+              </n-space>
+            </n-space>
+          </div>
+          <n-divider style="--n-color: #ECECEC; margin: 12px 0;"></n-divider>
+          <div class="user_content">
+            <n-space justify="center" align="center">
+              <n-a tag="div" :underline="false" href="mailto://209651109@qq.com">联系我们</n-a>
+            </n-space>
+          </div>
+        </n-card>
+      </n-space>
       <div></div>
     </n-space>
     <n-modal v-model:show="modify" :mask-closable="false" preset="dialog" :show-icon="false" title="修改信息">
@@ -174,13 +178,14 @@
 
 <script setup>
 import {ref, onMounted, inject} from "vue";
-import {useRoute, useRouter} from "vue-router";
+import {useRoute, useRouter, onBeforeRouteUpdate} from "vue-router";
 import {
   NLayout, NSpace, NCard, NAvatar, NA,
   NH2, NH3, NList, NListItem, NText, NEmpty,
   NButton, NInput, NModal, NDivider, useMessage
 } from "naive-ui";
 
+import SearchInput from "@/components/SearchInput";
 import BackgroundImage from "@/components/BackgroundImage";
 
 // 是否在修改
@@ -189,6 +194,8 @@ const modify = ref(false)
 const avatar = ref("")
 const username = ref("")
 const nickname = ref("")
+
+const userKeyword = ref("")
 
 const nickname_old = ref("")
 const nickname_new = ref("")
@@ -207,7 +214,7 @@ const message = useMessage();
 
 const md5 = inject("md5")
 const axios = inject("axios")
-const login_status = inject("login")
+const isAdmin = inject("isAdmin")
 const dateFormat = inject("dateFormat")
 
 function str_time(time_str) {
@@ -225,12 +232,27 @@ const setModify = () => {
   modify.value = true
 }
 
+const onSearch = (value) => {
+  axios.post("/api/admin/user/query", {
+    Keyword: value,
+  }).then(response => {
+    if (response.data.status === -1) {
+      message.error(response.data.message)
+      return
+    }
+
+    router.push({path: "/user/" + response.data.data.username})
+  }).catch(() => {
+    message.error("网络错误");
+  })
+}
+
 const goHistory = () => {
-  router.push({path: "/user/" + login_status.value.username + "/history"})
+  router.push({path: "/user/" + username.value + "/history"})
 }
 
 const goCollect = () => {
-  router.push({path: "/user/" + login_status.value.username + "/collect"})
+  router.push({path: "/user/" + username.value + "/collect"})
 }
 
 const updateUserInfo = () => {
@@ -238,7 +260,7 @@ const updateUserInfo = () => {
   let md5_password_new = md5(password_new.value)
 
   axios.post("/api/user/info/update", {
-    Username: login_status.value.username,
+    Username: username.value,
     Nickname: nickname_new.value,
     PasswordOld: md5_password_old,
     PasswordNew: md5_password_new,
@@ -263,51 +285,64 @@ const updateUserInfo = () => {
   })
 }
 
+function queryData(username_local) {
+  axios.post("/api/user/info", {
+    Username: username_local,
+  }).then(response => {
+    if (response.data.status === -1) {
+      message.error(response.data.message)
+      router.push({path: "/login"})
+      return
+    }
+
+    avatar.value = response.data.data.avatar
+    username.value = response.data.data.username
+    nickname.value = response.data.data.nickname
+  }).catch(err => {
+    if (err.response.status === 401) {
+      router.push({path: "/login"})
+    }
+    message.error("网络错误");
+  })
+
+  axios.post("/api/user/history/all", {
+    Username: username_local,
+    Limit: 5
+  }).then(response => {
+    if (response.data.status === -1) {
+      message.error(response.data.message)
+    }
+
+    history.value = response.data.data.result
+    show_history_empty.value = response.data.data.result.length === 0
+  })
+
+  axios.post("/api/user/collect/all", {
+    Username: username_local,
+    Limit: 5
+  }).then(response => {
+    if (response.data.status === -1) {
+      message.error(response.data.message)
+    }
+
+    collect.value = response.data.data.result
+    show_collect_empty.value = response.data.data.result.length === 0
+  })
+}
+
 onMounted(() => {
   let username_local = ""
   if ("username" in route.params) {
     username_local = route.params.username
+    queryData(username_local)
+  }
+})
 
-    axios.post("/api/user/info", {
-      Username: username_local,
-    }).then(response => {
-      if (response.data.status === -1) {
-        message.error(response.data.message)
-      }
-
-      avatar.value = response.data.data.avatar
-      username.value = response.data.data.username
-      nickname.value = response.data.data.nickname
-    }).catch(err => {
-      if (err.response.status === 401) {
-        router.push({path: "/login"})
-      }
-      message.error("网络错误");
-    })
-
-    axios.post("/api/user/history/all", {
-      Username: username_local,
-      Limit: 5
-    }).then(response => {
-      if (response.data.status === -1) {
-        message.error(response.data.message)
-      }
-
-      history.value = response.data.data.result
-      show_history_empty.value = response.data.data.result.length === 0
-    })
-
-    axios.post("/api/user/collect/all", {
-      Username: username_local,
-      Limit: 5
-    }).then(response => {
-      if (response.data.status === -1) {
-        message.error(response.data.message)
-      }
-
-      collect.value = response.data.data.result
-      show_collect_empty.value = response.data.data.result.length === 0
-    })
+onBeforeRouteUpdate(to => {
+  let username_local = ""
+  if ("username" in to.params) {
+    username_local = to.params.username
+    queryData(username_local)
   }
 })
 </script>
@@ -317,6 +352,11 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   position: relative;
+}
+
+.search_content {
+  margin: 16px 0;
+  width: 480px;
 }
 
 .user_content {

@@ -17,16 +17,21 @@
           <n-list-item v-for="(item, index) in dataList" :item="item" :index="index" :key="item.id">
             <router-link :to="generateUrl(item)" #="{ navigate, href }" custom>
               <n-space justify="space-between" align="center" :wrap="false">
-                <n-a tag="div" :underline="false" :href="href" @click="navigate">
+                <n-a v-if="showJumpLink"  tag="div" :underline="false" :href="href" @click="navigate">
                   <div>
                     {{ index + 1 }}
                     <span style="padding-left: 16px">{{ item.content.substr(0, 30) }}...</span>
                   </div>
                 </n-a>
+                <div v-else>
+                  {{ index + 1 }}
+                  <span style="padding-left: 16px">{{ item.content.substr(0, 30) }}...</span>
+                </div>
                 <div>
-                  <n-a tag="div" :underline="false" :href="href" @click="navigate">
-                    {{ str_time(item.activity_time) }}
+                  <n-a v-if="showJumpLink" tag="div" :underline="false" :href="href" @click="navigate">
+                    <span>{{ str_time(item.activity_time) }}</span>
                   </n-a>
+                  <span v-else>{{ str_time(item.activity_time) }}</span>
                   <n-button type="error" style="margin-left: 8px" @click="removeHistory(item.id)">删除</n-button>
                 </div>
               </n-space>
@@ -39,20 +44,23 @@
 </template>
 
 <script setup>
-import {ref, onMounted, inject} from "vue";
 import {useRoute, useRouter} from "vue-router";
+import {ref, onMounted, inject, watch} from "vue";
 import {NLayout, NEmpty, NSpace, NList, NListItem, NText, NH1, NA, NButton, useMessage} from "naive-ui";
 
 import BackgroundImage from "@/components/BackgroundImage";
 
+const username = ref("")
 const dataList = ref([])
 const showEmpty = ref(false)
+const showJumpLink = ref(false)
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
 
 const axios = inject("axios")
+const isAdmin = inject("isAdmin")
 const login_status = inject("login")
 const dateFormat = inject("dateFormat")
 
@@ -63,7 +71,7 @@ function str_time(time_str) {
 
 function removeHistory(post_id) {
   axios.post("/api/user/history/remove", {
-    Username: login_status.value.username,
+    Username: username.value,
     PostId: post_id * 1
   }).then(response => {
     if (response.data.status === -1) {
@@ -71,7 +79,7 @@ function removeHistory(post_id) {
     }
   }).then(() => {
     axios.post("/api/user/history/all", {
-      Username: login_status.value.username,
+      Username: username.value,
     }).then(response => {
       if (response.data.status === -1) {
         message.error(response.data.message)
@@ -99,12 +107,19 @@ function generateUrl(item) {
       (item.tags === "" ? item.content.substr(0, 4) : tag) + "&from=history"
 }
 
+watch(
+    () => login_status.value.username,
+    value => {
+      console.log(123)
+      showJumpLink.value = !isAdmin() || username.value === value
+    }
+)
+
 onMounted(() => {
-  let username_local = ""
   if ("username" in route.params) {
-    username_local = route.params.username
+    username.value = route.params.username
     axios.post("/api/user/history/all", {
-      Username: username_local,
+      Username: username.value,
     }).then(response => {
       if (response.data.status === -1) {
         message.error(response.data.message)
@@ -117,6 +132,8 @@ onMounted(() => {
         router.push({path: "/login"})
       }
     })
+
+    showJumpLink.value = !isAdmin() || username.value === login_status.value.username
   }
 })
 </script>

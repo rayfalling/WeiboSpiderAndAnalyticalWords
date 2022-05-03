@@ -30,7 +30,7 @@
                     <n-a tag="div" :underline="false" :href="href" @click="navigate">
                       {{ str_time(item.time) }}
                     </n-a>
-                    <n-button v-if="isAdmin" type="error" style="margin-left: 8px" @click="removePost(item.id)">
+                    <n-button v-if="isAdmin()" type="error" style="margin-left: 8px" @click="removePost(item.id)">
                       删除
                     </n-button>
                   </div>
