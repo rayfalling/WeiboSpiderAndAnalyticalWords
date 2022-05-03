@@ -10,7 +10,7 @@ from ..database_model import SpiderOriginPostData, SpiderOriginCommentData
 from libs import FormatLogger
 from libs.data_model import PostData, CommentData
 
-__all__ = ("insert_all_post_data",)
+__all__ = ("insert_all_post_data", )
 
 
 def insert_all_post_data(post_data_list: typing.List[PostData]) -> list[int]:
@@ -50,7 +50,7 @@ def insert_all_post_data(post_data_list: typing.List[PostData]) -> list[int]:
             post_modify_list.append(data_id)
     session.commit()
     session.close()
-    
+
     return post_modify_list
 
 

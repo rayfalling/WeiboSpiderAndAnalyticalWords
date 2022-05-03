@@ -8,9 +8,8 @@ from libs.data_model import PostData, PostDataContent, WordFrequency
 from .common import process_after_request, process_login_status
 
 from ..thread_pool import submit_function_async
-from ..functions import clear_all_data, insert_all_post_data
+from ..functions import clear_all_data, insert_all_post_data, delete_post_with_id
 from ..functions import insert_all_word_split_data, query_all_post_and_comment_by_keyword
-
 
 admin_router = Blueprint("admin", __name__)
 admin_router.before_request(process_login_status)
@@ -19,6 +18,7 @@ admin_router.after_request(process_after_request)
 __all__ = ("admin_router",)
 
 
+# noinspection DuplicatedCode
 @admin_router.route("/api/admin/spider/update", methods=["POST"])
 def request_spider_update():
     """
@@ -69,6 +69,51 @@ def request_spider_update():
 
     # 异步线程开始处理分词结果
     submit_function_async(spider_update_database, result)
+
+    return jsonify(response_data)
+
+
+# noinspection DuplicatedCode
+@admin_router.route("/api/admin/post/delete", methods=["POST"])
+def request_post_delete():
+    """
+    路由--删除微博数据
+
+    :return:
+    """
+    response_data = {
+        "status": -1,
+        "message": "请求失败",
+        "data": {}
+    }
+
+    if request.method != "POST":
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "无效请求"
+        return jsonify(response_data)
+
+    if session.get("user_type") is None or session.get("user_type") == 1:
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "用户不是管理员"
+        return jsonify(response_data)
+
+    request_data = request.get_data()
+    request_json = json.loads(request_data)
+    request_post_id = request_json.get("PostId", -1)
+
+    if request_post_id == -1:
+        FormatLogger.error("AdminRouter", "Empty request data! Request url is {}".format(request.url))
+        response_data["message"] = "参数错误"
+        return jsonify(response_data)
+
+    result = delete_post_with_id(request_post_id)
+
+    if not result:
+        response_data["status"] = -1
+        response_data["message"] = "删除失败"
+    else:
+        response_data["status"] = 0
+        response_data["message"] = "删除成功"
 
     return jsonify(response_data)
 

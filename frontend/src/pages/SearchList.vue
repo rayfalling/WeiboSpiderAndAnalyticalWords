@@ -18,18 +18,23 @@
             </template>
             <n-list-item v-for="(item, index) in dataList" :item="item" :index="index" :key="item.id">
               <router-link :to="'/post/detail/' + item.id + '?keyword=' + keyword" #="{ navigate, href }" custom>
-                <n-a tag="div" :underline="false" :href="href" @click="navigate">
-                  <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
+                <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
+                  <n-a tag="div" :underline="false" :href="href" @click="navigate">
                     <div>
                       {{ index + 1 }}
                       <span style="padding-left: 16px">{{ spilt_content(item.content) }}</span>
                       <span v-if="item.tags.length !== 0" style="padding-left: 16px">{{ item.tags }}</span>
                     </div>
-                    <div>
+                  </n-a>
+                  <div>
+                    <n-a tag="div" :underline="false" :href="href" @click="navigate">
                       {{ str_time(item.time) }}
-                    </div>
-                  </n-space>
-                </n-a>
+                    </n-a>
+                    <n-button v-if="isAdmin" type="error" style="margin-left: 8px" @click="removePost(item.id)">
+                      删除
+                    </n-button>
+                  </div>
+                </n-space>
               </router-link>
             </n-list-item>
           </n-list>
@@ -42,7 +47,7 @@
 <script setup>
 import {ref, onMounted, inject} from "vue";
 import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
-import {NLayout, NEmpty, NSpace, NList, NListItem, NText, NH1, NA, useMessage} from "naive-ui";
+import {NLayout, NEmpty, NSpace, NList, NListItem, NText, NH1, NA, NButton, useMessage} from "naive-ui";
 
 import SearchInput from "@/components/SearchInput";
 import BackgroundImage from "@/components/BackgroundImage";
@@ -50,12 +55,13 @@ import BackgroundImage from "@/components/BackgroundImage";
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
+
 const axios = inject("axios")
+const isAdmin = inject("isAdmin")
 const dateFormat = inject("dateFormat")
 
 const showEmpty = ref(false)
 const keyword = ref(null)
-
 const dataList = ref([])
 
 const onSearch = word => {
@@ -65,6 +71,23 @@ const onSearch = word => {
     // jump to search page
     router.push({path: "/search", query: {keyword: word}})
   }
+}
+
+const removePost = (post_id) => {
+  axios.post("/api/admin/post/delete", {
+    PostId: post_id
+  }).then(response => {
+    if (response.data.status === -1) {
+      message.error("删除失败")
+    } else {
+      message.info("删除成功")
+      querySearch()
+    }
+  }).catch(err => {
+    if (err.response.status === 401) {
+      router.push({path: "/login"})
+    }
+  })
 }
 
 function str_time(time_str) {
