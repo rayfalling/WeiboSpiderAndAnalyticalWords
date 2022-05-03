@@ -62,7 +62,10 @@ def query_post_detail_by_id(post_id: int) -> PostDetail:
 
     comments = []
     for comment in comment_result:
-        comments.append(comment.content)
+        comments.append({
+            "id": comment.id,
+            "content": comment.content
+        })
 
     session.close()
 

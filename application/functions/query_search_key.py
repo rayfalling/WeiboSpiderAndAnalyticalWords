@@ -16,7 +16,7 @@ def query_or_insert_search_key_id(key: str):
     :return:
     """
     session: scoped_session = db.create_scoped_session(None)
-    result = query_comment_with_id(session, key)
+    result = query_search_key(session, key)
 
     if len(result) > 1:
         FormatLogger.warning("Database", "Multi search key in database.")
@@ -41,7 +41,7 @@ def query_search_key_id(key: str):
     :return:
     """
     session: scoped_session = db.create_scoped_session(None)
-    result = query_comment_with_id(session, key)
+    result = query_search_key(session, key)
 
     if len(result) > 1:
         FormatLogger.warning("Database", "Multi search key in database.")
@@ -56,7 +56,7 @@ def query_search_key_id(key: str):
     return search_key_id
 
 
-def query_comment_with_id(session: scoped_session, key: str) -> list[SpiderSearchKey]:
+def query_search_key(session: scoped_session, key: str) -> list[SpiderSearchKey]:
     """
     获取当前所有的评论数据
 
