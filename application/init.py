@@ -4,7 +4,7 @@ from flask import Flask
 
 from config import Config, GLOBAL_DEBUG
 from .core import app, db, CustomRequestHandler
-from .router import user_router, admin_router, search_router, detail_router, user_activity_router
+from .router import user_router, admin_router, search_router, detail_router, word_cloud_router, user_activity_router
 
 __all__ = ("main",)
 
@@ -23,6 +23,7 @@ def init(flask_app: Flask):
     flask_app.register_blueprint(admin_router)
     flask_app.register_blueprint(search_router)
     flask_app.register_blueprint(detail_router)
+    flask_app.register_blueprint(word_cloud_router)
     flask_app.register_blueprint(user_activity_router)
 
 

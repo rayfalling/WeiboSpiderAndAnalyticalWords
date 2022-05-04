@@ -2,12 +2,10 @@ import typing
 
 from sqlalchemy.orm import scoped_session
 
+from libs import TagTrend
 from .query_search_key import query_search_key_id
-
 from ..core import db
-from ..database_model import SpiderSearchKey, SpiderOriginPostData, SpiderOriginCommentData
-
-from libs import FormatLogger, TagTrend
+from ..database_model import SpiderOriginPostData
 
 __all__ = ("query_search_key_trend",)
 
