@@ -6,6 +6,8 @@ import router from "./router/route"
 import axios from "axios";
 import md5 from "js-md5"
 
+import * as echarts from "echarts"
+
 const md5_password = (password) => {
     let hash = md5.create()
     hash.update(password)
@@ -36,6 +38,7 @@ const app = createApp(App);
 app.use(router);
 app.use(VueAxios, axios);
 app.provide("axios", app.config.globalProperties.axios)
+app.provide("echarts", echarts)
 app.provide("md5", md5_password)
 app.provide("dateFormat", dateFormat)
 app.mount("#app");
