@@ -2,6 +2,7 @@ import json
 
 from flask import Blueprint, request, jsonify, session
 
+from config import Config
 from libs import fetch_pages, FormatLogger, word_split
 from libs.data_model import PostData, PostDataContent, WordFrequency
 
@@ -48,6 +49,9 @@ def request_spider_update():
     request_json = json.loads(request_data)
     request_pages = request_json.get("Pages", 0)
     request_keyword = request_json.get("Keyword", "")
+
+    # save to config
+    Config.SEARCH_KEYWORD = request_keyword
 
     if request_pages == 0 or request_keyword == "":
         FormatLogger.error("AdminRouter", "Empty request data! Request url is {}".format(request.url))

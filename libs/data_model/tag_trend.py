@@ -1,6 +1,5 @@
 # coding: utf-8
-from config.flask_config import TAG_TREND_POST_COMMENT_WEIGHT, TAG_TREND_POST_ATTITUDE_WEIGHT
-from config.flask_config import TAG_TREND_POST_AUTHOR_WEIGHT, TAG_TREND_POST_COUNT_WEIGHT, TAG_TREND_POST_REPOST_WEIGHT
+from config import Config
 
 
 class TagTrend(object):
@@ -79,13 +78,13 @@ class TagTrend(object):
         if not self.__dirty:
             return
 
-        self.__trend = self.__post_count * TAG_TREND_POST_COUNT_WEIGHT
+        self.__trend = self.__post_count * Config.TAG_TREND_POST_COUNT_WEIGHT
 
-        self.__trend += self.__reposts * TAG_TREND_POST_REPOST_WEIGHT
-        self.__trend += self.__comments * TAG_TREND_POST_COMMENT_WEIGHT
-        self.__trend += self.__attitudes * TAG_TREND_POST_ATTITUDE_WEIGHT
+        self.__trend += self.__reposts * Config.TAG_TREND_POST_REPOST_WEIGHT
+        self.__trend += self.__comments * Config.TAG_TREND_POST_COMMENT_WEIGHT
+        self.__trend += self.__attitudes * Config.TAG_TREND_POST_ATTITUDE_WEIGHT
 
-        self.__trend += len(self.__post_author_set) * TAG_TREND_POST_AUTHOR_WEIGHT
+        self.__trend += len(self.__post_author_set) * Config.TAG_TREND_POST_AUTHOR_WEIGHT
 
         self.__dirty = False
 

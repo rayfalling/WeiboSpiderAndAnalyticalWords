@@ -1,0 +1,10 @@
+{
+    "neutral_word_range": 0.3,
+    "search_keyword": "鸿星尔克",
+    "tag_trend_post_attitude_weight": 10,
+    "tag_trend_post_author_weight": 15,
+    "tag_trend_post_comment_weight": 20,
+    "tag_trend_post_count_weight": 40,
+    "tag_trend_post_repost_weight": 15,
+    "word_sentiment_weight": 0.7
+}

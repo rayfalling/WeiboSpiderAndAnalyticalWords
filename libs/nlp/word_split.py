@@ -8,9 +8,9 @@ import jieba
 import jieba.posseg
 from snownlp import SnowNLP
 
+from config import Config
 from utils import get_project_path
 from libs.logger import FormatLogger
-from config.flask_config import WORD_SENTIMENT_WEIGHT, NEUTRAL_WORD_RANGE
 
 # 停用词表
 STOPWORDS: list[str] = []
@@ -161,7 +161,9 @@ def merge_sentiment_range(sentiment_string: float, sentiment_word: float) -> flo
     :param sentiment_word: 词语情感权重
     :return:
     """
-    return round(sentiment_word * WORD_SENTIMENT_WEIGHT + sentiment_string * (1.0 - WORD_SENTIMENT_WEIGHT), 4)
+    return round(
+        sentiment_word * Config.WORD_SENTIMENT_WEIGHT + sentiment_string * (1.0 - Config.WORD_SENTIMENT_WEIGHT), 4
+    )
 
 
 def map_sentiment_to_int_emotion(sentiment: float) -> int:
@@ -171,9 +173,9 @@ def map_sentiment_to_int_emotion(sentiment: float) -> int:
     :param sentiment:
     :return:
     """
-    if sentiment < -NEUTRAL_WORD_RANGE:
+    if sentiment < -Config.NEUTRAL_WORD_RANGE:
         return -1
-    elif sentiment > NEUTRAL_WORD_RANGE:
+    elif sentiment > Config.NEUTRAL_WORD_RANGE:
         return 1
 
     return 0

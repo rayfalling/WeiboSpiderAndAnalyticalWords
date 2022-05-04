@@ -44,6 +44,3 @@ invalid_keyword = {
     "的微博视频": False,
     "微博问答": True
 }
-
-# 固定搜索的关键词
-search_keyword = "鸿星尔克"

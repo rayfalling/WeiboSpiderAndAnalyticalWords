@@ -2,7 +2,8 @@ import json
 
 from flask import Blueprint, request, jsonify
 
-from config.spider_config import search_keyword
+from config import Config
+
 from libs import FormatLogger
 from .common import process_after_request, process_login_status
 from ..functions import query_post_detail_by_id, query_search_key_trend
@@ -89,7 +90,7 @@ def request_post_trend():
         response_data["message"] = "无效请求"
         return jsonify(response_data)
 
-    result = query_search_key_trend(search_keyword)
+    result = query_search_key_trend(Config.SEARCH_KEYWORD)
 
     if result is None:
         FormatLogger.error("PostRouter", "Error request data! Request url is {}".format(request.url))

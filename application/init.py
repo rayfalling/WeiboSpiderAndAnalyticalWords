@@ -1,6 +1,8 @@
+import atexit
+
 from flask import Flask
 
-from config.flask_config import GLOBAL_DEBUG
+from config import Config, GLOBAL_DEBUG
 from .core import app, db, CustomRequestHandler
 from .router import user_router, admin_router, search_router, detail_router, user_activity_router
 
@@ -24,8 +26,24 @@ def init(flask_app: Flask):
     flask_app.register_blueprint(user_activity_router)
 
 
+def load_config():
+    from libs import FormatLogger
+    FormatLogger.info("App", "Loading application config.")
+    Config.load()
+
+
+def save_config():
+    from libs import FormatLogger
+    FormatLogger.info("App", "Saving application config.")
+    Config.save()
+
+
 # 主启动函数
 def main():
+    # Load Config
+    load_config()
+    atexit.register(save_config)
+
     # 注册路由时间
     init(app)
     # 创建数据库相关
