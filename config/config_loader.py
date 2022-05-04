@@ -14,6 +14,15 @@ class Config(object):
     # 中性词权重范围
     NEUTRAL_WORD_RANGE = 0.3
 
+    # 中性词颜色
+    NEUTRAL_WORD_COLOR = "rgb(244, 208, 0)"
+
+    # 正向词颜色C
+    POSITIVE_WORD_COLOR = "rgb(131, 175, 155)"
+
+    # 负向词颜色
+    NEGATIVE_WORD_COLOR = "rgb(254, 67, 101)"
+
     # 词条相关微博数量权重
     TAG_TREND_POST_COUNT_WEIGHT = 40
 
@@ -28,6 +37,9 @@ class Config(object):
 
     # 词条相关微博转发量权重
     TAG_TREND_POST_COMMENT_WEIGHT = 20
+
+    # 词条相关微博转发量权重
+    WORD_CLOUD_LIMIT_COUNT = 20
 
     @classmethod
     def load(cls):
