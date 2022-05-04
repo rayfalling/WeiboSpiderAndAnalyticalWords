@@ -54,3 +54,51 @@ class WordFrequency(object):
             "count": self.count,
             "emotion": self.emotion
         })
+
+
+class WordFrequencySummary(object):
+    """
+    爬虫数据基类
+    """
+
+    def __init__(self, key: str, count: int = 0, emotion: float = 0):
+        """
+        微博数据构造函数
+
+        :param key: 关键词
+        :param count: 词频
+        :param emotion: 情感倾向
+        """
+
+        # 关键词
+        self.key: str = key
+        # 词频
+        self.count: int = count
+        # 情感倾向
+        self.__emotion: float = count * emotion
+
+    def add_result(self, count: int = 0, emotion: float = 0):
+        """
+        添加别的分词结果
+
+        :param count:
+        :param emotion:
+        :return:
+        """
+        self.count += count
+        self.__emotion += count * emotion
+
+    def get_emotion(self):
+        """
+        获取情感倾向
+
+        :return:
+        """
+        return self.__emotion / self.count
+
+    def __repr__(self):
+        return str({
+            "key": self.key,
+            "count": self.count,
+            "emotion": self.get_emotion()
+        })
