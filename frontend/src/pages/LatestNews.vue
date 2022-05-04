@@ -13,10 +13,15 @@
           <div class="card_block detail">
             <n-card hoverable content-style="padding: 0 8px 8px 8px;" style="height: 100%" size="medium">
               <template #header>
-                <n-space align="center">
+                <n-space justify="space-between" align="center">
                   <n-h2 prefix="bar" align-text style="margin-bottom: 0">
                     <n-text type="primary">词云热榜</n-text>
                   </n-h2>
+                  <n-space v-if="isAdmin()" justify="space-between" align="center">
+                    <n-input v-model:value="word_count" style="width: 180px" type="text" round size="small"
+                             placeholder="请输入词云数量"/>
+                    <n-button size="small" round type="primary" @click="onUpdateWordCount">更新</n-button>
+                  </n-space>
                 </n-space>
               </template>
               <div id="word_cloud" class="card_content"></div>
@@ -91,10 +96,19 @@
           <div class="card_block comments">
             <n-card hoverable content-style="padding: 0 8px 8px 8px;" style="height: 100%" size="medium">
               <template #header>
-                <n-space align="center">
+                <n-space justify="space-between" align="center">
                   <n-h2 prefix="bar" align-text style="margin-bottom: 0">
                     <n-text type="primary">热度趋势</n-text>
                   </n-h2>
+                  <n-space v-if="isAdmin()" justify="space-between" align="center">
+                    <n-input v-model:value="trend_count" style="width: 180px" type="text" round size="small"
+                             placeholder="实时热度周期数"/>
+                    <n-input v-model:value="predict_count" style="width: 180px" type="text" round size="small"
+                             placeholder="预测热度周期数"/>
+                    <n-input v-model:value="trend_hour" style="width: 180px" type="text" round size="small"
+                             placeholder="热度统计周期（小时）"/>
+                    <n-button size="small" round type="primary" @click="onUpdateTrendCount">更新</n-button>
+                  </n-space>
                 </n-space>
               </template>
               <div id="trend" class="card_content"></div>
@@ -109,7 +123,7 @@
 <script setup>
 import {ref, onMounted, inject} from "vue";
 import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
-import {NLayout, NSpace, NCard, NH2, NText, NList, NListItem, NEmpty} from "naive-ui";
+import {NLayout, NSpace, NCard, NH2, NText, NList, NListItem, NEmpty, NInput, NButton, useMessage} from "naive-ui";
 
 import SearchInput from "@/components/SearchInput";
 import BackgroundImage from "@/components/BackgroundImage";
@@ -118,10 +132,11 @@ require("echarts-wordcloud");
 
 const route = useRoute();
 const router = useRouter();
+const message = useMessage();
 
 const axios = inject("axios")
 const echarts = inject("echarts")
-// const isAdmin = inject("isAdmin")
+const isAdmin = inject("isAdmin")
 const dateFormat = inject("dateFormat")
 
 const keyword = ref(null)
@@ -139,12 +154,69 @@ const neutral_color = ref("#000000")
 const negative_color = ref("#000000")
 const positive_color = ref("#000000")
 
+const word_count = ref(null)
+const trend_hour = ref(null)
+const trend_count = ref(null)
+const predict_count = ref(null)
+
 let trend = null
 let word_cloud = null
 
 function str_time(time_str) {
   let date = new Date(time_str)
   return dateFormat("mm-dd HH:00", date)
+}
+
+const onUpdateWordCount = () => {
+  if (!isAdmin())
+    return
+
+  if (word_count.value * 1 < 0) {
+    message.error("配置参数错误")
+  }
+
+  axios.post("/api/admin/word_cloud/update", {
+    WordCloudCount: word_count.value * 1
+  }).then(response => {
+    if (response.data.status !== 0) {
+      message.error(response.data.message)
+    }
+
+    queryTrend()
+    querySearch()
+    queryHotTrend()
+  }).catch(err => {
+    if (err.response.status === 401) {
+      router.push({path: "/login"})
+    }
+  })
+}
+
+const onUpdateTrendCount = () => {
+  if (!isAdmin())
+    return
+
+  if (trend_hour.value * 1 < 0 || trend_count.value * 1 < 0 || predict_count.value * 1 < 0) {
+    message.error("配置参数错误")
+  }
+
+  axios.post("/api/admin/word_trend/update", {
+    TrendHour: trend_hour.value * 1,
+    TrendCount: trend_count.value * 1,
+    PredictCount: predict_count.value * 1
+  }).then(response => {
+    if (response.data.status !== 0) {
+      message.error(response.data.message)
+    }
+
+    queryTrend()
+    querySearch()
+    queryHotTrend()
+  }).catch(err => {
+    if (err.response.status === 401) {
+      router.push({path: "/login"})
+    }
+  })
 }
 
 const onSearch = (word) => {

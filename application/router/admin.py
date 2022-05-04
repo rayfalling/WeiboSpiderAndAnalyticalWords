@@ -172,6 +172,94 @@ def request_comment_delete():
 
 
 # noinspection DuplicatedCode
+@admin_router.route("/api/admin/word_trend/update", methods=["POST"])
+def request_word_trend_update():
+    """
+    路由--更新热度趋势配置
+
+    :return:
+    """
+    response_data = {
+        "status": -1,
+        "message": "请求失败",
+        "data": {}
+    }
+
+    if request.method != "POST":
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "无效请求"
+        return jsonify(response_data)
+
+    if session.get("user_type") is None or session.get("user_type") == 1:
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "用户不是管理员"
+        return jsonify(response_data)
+
+    request_data = request.get_data()
+    request_json = json.loads(request_data)
+    request_trend_hour = request_json.get("TrendHour", -1)
+    request_trend_count = request_json.get("TrendCount", -1)
+    request_predict_count = request_json.get("PredictCount", -1)
+
+    if request_trend_hour < 0 or request_trend_count < 0 or request_predict_count < 0:
+        FormatLogger.error("AdminRouter", "Empty request data! Request url is {}".format(request.url))
+        response_data["message"] = "参数错误"
+        return jsonify(response_data)
+
+    # save to config
+    Config.TREND_CYCLE_HOUR = request_trend_hour
+    Config.TREND_CYCLE_COUNT = request_trend_count
+    Config.TREND_PREDICT_COUNT = request_predict_count
+
+    response_data["status"] = 0
+    response_data["message"] = "保存成功"
+
+    return jsonify(response_data)
+
+
+# noinspection DuplicatedCode
+@admin_router.route("/api/admin/word_cloud/update", methods=["POST"])
+def request_word_cloud_update():
+    """
+    路由--更新词云配置参数
+
+    :return:
+    """
+    response_data = {
+        "status": -1,
+        "message": "请求失败",
+        "data": {}
+    }
+
+    if request.method != "POST":
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "无效请求"
+        return jsonify(response_data)
+
+    if session.get("user_type") is None or session.get("user_type") == 1:
+        FormatLogger.error("AdminRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "用户不是管理员"
+        return jsonify(response_data)
+
+    request_data = request.get_data()
+    request_json = json.loads(request_data)
+    request_word_cloud_count = request_json.get("WordCloudCount", -1)
+
+    if request_word_cloud_count < 0:
+        FormatLogger.error("AdminRouter", "Empty request data! Request url is {}".format(request.url))
+        response_data["message"] = "参数错误"
+        return jsonify(response_data)
+
+    # save to config
+    Config.WORD_CLOUD_LIMIT_COUNT = request_word_cloud_count
+
+    response_data["status"] = 0
+    response_data["message"] = "保存成功"
+
+    return jsonify(response_data)
+
+
+# noinspection DuplicatedCode
 @admin_router.route("/api/admin/user/query", methods=["POST"])
 def request_query_user():
     """

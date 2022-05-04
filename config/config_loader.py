@@ -41,11 +41,14 @@ class Config(object):
     # 词条相关微博转发量权重
     WORD_CLOUD_LIMIT_COUNT = 20
 
+    # 热度趋势时间周期时长
+    TREND_CYCLE_HOUR = 4
+
     # 热度趋势时间周期个数
     TREND_CYCLE_COUNT = 8
 
-    # 热度趋势时间周期时长
-    TREND_CYCLE_HOUR = 4
+    # 热度趋势预测周期个数
+    TREND_PREDICT_COUNT = 2
 
     @classmethod
     def load(cls):

@@ -320,4 +320,4 @@ def predict_trend_1(trend_data: list[float]):
     y_axis = numpy.array(trend_data)
 
     predict = numpy.poly1d(numpy.polyfit(x_axis, y_axis, 3))
-    return [predict(len(trend_data)), predict(len(trend_data) + 1), predict(len(trend_data) + 2)]
+    return [predict(len(trend_data) + index) for index in range(Config.TREND_PREDICT_COUNT)]

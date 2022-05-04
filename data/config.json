@@ -11,6 +11,7 @@
     "tag_trend_post_repost_weight": 15,
     "tag_trend_post_comment_weight": 20,
     "word_cloud_limit_count": 20,
+    "trend_cycle_hour": 4,
     "trend_cycle_count": 8,
-    "trend_cycle_hour": 4
+    "trend_predict_count": 2
 }
