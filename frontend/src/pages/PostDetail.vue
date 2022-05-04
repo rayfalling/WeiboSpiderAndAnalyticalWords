@@ -17,7 +17,7 @@
                   <div style="text-align: center; font-size: 1.5rem;">
                     {{ post_detail.tags }}
                   </div>
-                  <div  style="width: 120px; text-align: right;">
+                  <div style="width: 120px; text-align: right;">
                     <n-button v-if="isAdmin()" type="error" @click="removePost(post_id)">
                       删除
                     </n-button>
@@ -161,7 +161,7 @@
                                    :key="item">
                         <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
                           <div>
-                            {{ index }}
+                            {{ index + 1 }}
                             <span style="padding-left: 16px"> {{ item.content }}  </span>
                           </div>
                           <n-button v-if="isAdmin()" type="error" @click="removeComment(item.id)">
@@ -445,11 +445,5 @@ onBeforeRouteUpdate(to => {
   font-size: 20px;
   margin-left: 8px;
   vertical-align: middle
-}
-</style>
-
-<style>
-.n-card-header__extra {
-  position: absolute;
 }
 </style>

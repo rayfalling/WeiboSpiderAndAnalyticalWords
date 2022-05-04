@@ -5,6 +5,7 @@ import LoginPage from "@/pages/LoginPage"
 import RegisterPage from "@/pages/RegisterPage"
 
 import TagTrend from "@/pages/TagTrend"
+import LatestNews from "@/pages/LatestNews"
 
 import PostDetail from "@/pages/PostDetail"
 import SearchList from "@/pages/SearchList"
@@ -33,6 +34,11 @@ const pageList = {
         title: "企业热榜",
         name: "trend",
         component: TagTrend
+    },
+    "latest": {
+        title: "最新动态",
+        name: "latest",
+        component: LatestNews
     },
     "search": {
         title: "资讯列表",

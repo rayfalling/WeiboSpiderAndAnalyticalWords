@@ -14,7 +14,7 @@
           <n-button style="font-size: 1.25rem" dashed tag="a" strong size="large" @click="goTrend">
             企业热搜
           </n-button>
-          <n-button style="font-size: 1.25rem" dashed tag="a" strong size="large">
+          <n-button style="font-size: 1.25rem" dashed tag="a" strong size="large" @click="goLatest">
             最新动态
           </n-button>
         </n-space>
@@ -52,6 +52,10 @@ const login_status = inject("login")
 
 const goTrend = () => {
   router.push({path: "/trend"})
+}
+
+const goLatest = () => {
+  router.push({path: "/latest"})
 }
 
 const onIndex = () => {
