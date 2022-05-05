@@ -121,6 +121,7 @@
           <div class="user_content">
             <n-space justify="center" align="center">
               <n-a tag="div" :underline="false" href="mailto://209651109@qq.com">联系我们</n-a>
+              <n-a tag="div" :underline="false" @click="logout">退出登录</n-a>
             </n-space>
           </div>
         </n-card>
@@ -215,6 +216,7 @@ const message = useMessage();
 const md5 = inject("md5")
 const axios = inject("axios")
 const isAdmin = inject("isAdmin")
+const login_status = inject("login")
 const dateFormat = inject("dateFormat")
 
 function str_time(time_str) {
@@ -253,6 +255,26 @@ const goHistory = () => {
 
 const goCollect = () => {
   router.push({path: "/user/" + username.value + "/collect"})
+}
+
+const logout = () => {
+  let username = login_status.value.username
+
+  login_status.value.login = false
+
+  login_status.value.avatar = ""
+  login_status.value.username = ""
+  login_status.value.nickname = ""
+  login_status.value.user_type = -1
+
+  axios.post("/api/user/logout", {Username: username}).then(response => {
+    if (response.data.status === -1) {
+      message.warning(response.data.message)
+    }
+
+    message.info("登出成功")
+    router.push({path: "/login"})
+  })
 }
 
 const updateUserInfo = () => {

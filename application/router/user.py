@@ -117,6 +117,43 @@ def request_register():
     return jsonify(response_data)
 
 
+@user_router.route("/api/user/logout", methods=["POST"])
+def query_logout():
+    """
+    路由--退出登录
+
+    :return:
+    """
+
+    response_data = {
+        "status": -1,
+        "message": "请求失败",
+        "data": {}
+    }
+
+    if request.method != "POST":
+        FormatLogger.error("UserRouter", "Error request method! Request url is {}".format(request.url))
+        response_data["message"] = "无效请求"
+        return jsonify(response_data)
+
+    request_data = request.get_data()
+    request_json = json.loads(request_data)
+    request_username = request_json.get("Username", "")
+
+    if session.get("login_status") is None or not session.get("login_status"):
+        response_data["status"] = -1
+        response_data["message"] = "用户未登录"
+    elif session["username"] != request_username:
+        response_data["status"] = -1
+        response_data["message"] = "登录态信息错误"
+    else:
+        response_data["status"] = 0
+        response_data["message"] = "用户已登出"
+
+    session.clear()
+    return jsonify(response_data)
+
+
 @user_router.route("/api/login/status", methods=["POST"])
 def query_login():
     """
