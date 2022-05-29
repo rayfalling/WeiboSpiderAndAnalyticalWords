@@ -7,26 +7,26 @@
       </n-space>
       <div v-else>
         <n-list bordered style="position: relative">
-            <template #header>
-              <n-h1 prefix="bar" align-text style="text-align: center">
-                <n-text type="primary">
-                  企业热搜
-                </n-text>
-              </n-h1>
-            </template>
-            <n-list-item v-for="(item, index) in dataList" :item="item" :index="index" :key="item.id">
-              <router-link :to="'/search?keyword=' + item.tags" #="{ navigate, href }" custom>
-                <n-a tag="div" :underline="false" :href="href" @click="navigate">
-                  <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
-                    <div>
-                      {{ index + 1 }}
-                      <span style="padding-left: 16px">#{{ item.tags }}#</span>
-                    </div>
-                    <div style="padding-left: 16px">{{ item.trend }}</div>
-                  </n-space>
-                </n-a>
-              </router-link>
-            </n-list-item>
+          <template #header>
+            <n-h1 prefix="bar" align-text style="text-align: center">
+              <n-text type="primary">
+                企业热搜
+              </n-text>
+            </n-h1>
+          </template>
+          <n-list-item v-for="(item, index) in dataList" :item="item" :index="index" :key="item.id">
+            <router-link :to="'/search?keyword=' + item.tags" #="{ navigate, href }" custom>
+              <n-a tag="div" :underline="false" :href="href" @click="navigate">
+                <n-space justify="space-between" align="center" item-style="padding: 16px" :wrap="false">
+                  <div>
+                    {{ index + 1 }}
+                    <span style="padding-left: 16px">#{{ item.tags }}#</span>
+                  </div>
+                  <div style="padding-left: 16px">{{ item.trend }}</div>
+                </n-space>
+              </n-a>
+            </router-link>
+          </n-list-item>
         </n-list>
       </div>
     </n-layout>

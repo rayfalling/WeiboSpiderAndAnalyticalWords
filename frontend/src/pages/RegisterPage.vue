@@ -6,7 +6,7 @@
       <n-config-provider :theme-overrides="themeOverrides">
         <n-card hoverable title="注&nbsp;&nbsp;&nbsp;&nbsp;册"
                 header-style="text-align: center; font-size: 1.5rem" content-style="padding: 8px;"
-                style="background-color: rgba(255, 255, 255, 0.2);">
+                style="background-color: rgba(255, 255, 255, 0.8);">
           <div class="card_content">
             <n-form ref="formRef" :model="model" label-placement="left" :show-require-mark="false"
                     :label-width="label_width" :rules="rules">

@@ -5,7 +5,7 @@
       <div></div>
       <n-card hoverable title="登&nbsp;&nbsp;&nbsp;&nbsp;录"
               header-style="text-align: center; font-size: 1.5rem" content-style="padding: 8px;"
-              style="background-color: rgba(255, 255, 255, 0.2);">
+              style="background-color: rgba(255, 255, 255, 0.8);">
         <div class="card_content">
           <n-form ref="formRef" :model="model" label-placement="left" :label-width="label_width">
             <n-form-item label="账号" path="username">

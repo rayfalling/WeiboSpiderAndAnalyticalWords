@@ -3,7 +3,7 @@
     <n-space justify="space-between" align="center">
       <div style="width: 320px; text-align: left">
         <n-space align="center" size="large">
-          <n-image width="48" :src="require('@/assets/logo.png')" preview-disabled/>
+          <n-image width="48" :src="require('@/assets/logo1.png')" preview-disabled/>
           <n-button style="font-size: 1.25rem" dashed tag="a" strong size="large" @click="onIndex">
             首页
           </n-button>

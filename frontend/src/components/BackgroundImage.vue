@@ -1,6 +1,6 @@
 <template>
   <div class="background-image-container">
-    <img :src="require('@/assets/bg.jpg')" alt=""/>
+    <img :src="require('@/assets/bg1.jpg')" alt=""/>
   </div>
 </template>
 
